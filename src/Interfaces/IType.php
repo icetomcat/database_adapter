@@ -4,5 +4,22 @@ namespace Database\Interfaces;
 
 interface IType
 {
-	//put your code here
+
+	function getName();
+
+	function getType();
+
+	function getLength();
+
+	function getIndex();
+
+	function isNull();
+
+	function getCollate();
+
+	function getDefault();
+
+	function isAutoIncrement();
+
+	function getAttribute();
 }
