@@ -1,8 +1,11 @@
 <?php
 
-namespace Services\Database;
+namespace Database;
 
-class Schema implements \System\Interfaces\ISchema
+use Database\Interfaces\ISchema;
+use Exception;
+
+class Schema implements ISchema
 {
 	/**
 	 *
@@ -107,7 +110,7 @@ class Schema implements \System\Interfaces\ISchema
 		if (in_array($column->getName(), $this->exclude))
 		{
 			//trigger_error($this->name() . "." . $column->getName() . ': this column is not acceptable', E_USER_WARNING);
-			throw new \Exception();
+			throw new Exception();
 		}
 		if ($column->getIndex() == self::ROLE_PRIMARY)
 		{

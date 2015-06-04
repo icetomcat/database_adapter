@@ -1,6 +1,8 @@
 <?php
 
-namespace Services\Database\MySQL\Traits;
+namespace Database\MySQL\Traits;
+
+use Exception;
 
 trait JoinTrait
 {
@@ -28,7 +30,7 @@ trait JoinTrait
 					break;
 
 				default:
-					throw new \Exception();
+					throw new Exception();
 			}
 			$result .= " {$this->quote($match[3])}";
 			if (is_array($value))
@@ -59,7 +61,7 @@ trait JoinTrait
 		}
 		else
 		{
-			throw new \Exception();
+			throw new Exception();
 		}
 	}
 

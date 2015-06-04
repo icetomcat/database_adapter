@@ -1,0 +1,13 @@
+{
+	"name": "icetomcat/database_adapter",
+    "description": "Database adapter with table schema and simple query builder.",
+	"require": {
+		"php": ">=5.4.0",
+		"phpunit/phpunit": "^4.6"
+	},
+	"autoload": {
+        "psr-4": {
+            "Database\\": "src/"
+        }
+    }
+}

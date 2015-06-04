@@ -1,8 +1,10 @@
 <?php
 
-namespace Services\Database;
+namespace Database;
 
-class Type implements \System\Interfaces\IDbType
+use Database\Interfaces\IType;
+
+class Type implements IType
 {
 	protected $name;
 	protected $type;

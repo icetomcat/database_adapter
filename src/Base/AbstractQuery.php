@@ -1,6 +1,9 @@
 <?php
 
-namespace Services\Database\Base;
+namespace Database\Base;
+
+use Exception;
+use PDOStatement;
 
 abstract class AbstractQuery
 {
@@ -12,7 +15,7 @@ abstract class AbstractQuery
 
 	/**
 	 *
-	 * @var \PDOStatement
+	 * @var PDOStatement
 	 */
 	protected $statment = null;
 
@@ -94,7 +97,7 @@ abstract class AbstractQuery
 	{
 		if (!isset($this->context["adapter"]))
 		{
-			throw new \Exception();
+			throw new Exception();
 		}
 
 		if (is_array($params))

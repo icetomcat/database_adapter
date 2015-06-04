@@ -1,15 +1,13 @@
 <?php
 
-namespace Services\Database;
+namespace Database;
 
 use Exception;
 use J;
 use PDO;
 use PDOException;
-use PDOStatement;
-use System\Interfaces\IDatabaseAdapter;
 
-class DatabaseAdapter implements IDatabaseAdapter
+class Adapter
 {
 
 	/**
@@ -17,7 +15,7 @@ class DatabaseAdapter implements IDatabaseAdapter
 	 * @var array
 	 */
 	protected $config = array();
-
+			
 	/**
 	 *
 	 * @var PDO

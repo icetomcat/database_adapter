@@ -1,8 +1,10 @@
 <?php
 
-namespace Services\Database\MySQL;
+namespace Database\MySQL;
 
-class Insert extends \Services\Database\Base\AbstractQuery
+use Database\Base\AbstractQuery;
+
+class Insert extends AbstractQuery
 {
 
 	public function getRawQuery()

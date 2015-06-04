@@ -1,6 +1,8 @@
 <?php
 
-namespace Services\Database\MySQL\Traits;
+namespace Database\MySQL\Traits;
+
+use Exception;
 
 trait LimitTrait
 {
@@ -27,12 +29,12 @@ trait LimitTrait
 				}
 				else
 				{
-					throw new \Exception("Error, 'count' and 'offset' must be an numeric, '" . str_replace(["\n", "  "], "", print_r($limit, true)) . "' given");
+					throw new Exception("Error, 'count' and 'offset' must be an numeric, '" . str_replace(["\n", "  "], "", print_r($limit, true)) . "' given");
 				}
 			}
 			else
 			{
-				throw new \Exception("You have an error near '" . str_replace(["\n", "  "], "", print_r($limit, true)) . "'");
+				throw new Exception("You have an error near '" . str_replace(["\n", "  "], "", print_r($limit, true)) . "'");
 			}
 		}
 		return null;

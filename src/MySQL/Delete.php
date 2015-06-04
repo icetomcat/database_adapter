@@ -1,8 +1,10 @@
 <?php
 
-namespace Services\Database\MySQL;
+namespace Database\MySQL;
 
-class Delete extends \Services\Database\Base\AbstractQuery
+use Database\Base\AbstractQuery;
+
+class Delete extends AbstractQuery
 {
 
 	use Traits\ColumnsTrait,

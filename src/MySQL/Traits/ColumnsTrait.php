@@ -1,6 +1,8 @@
 <?php
+namespace Database\MySQL\Traits;
 
-namespace Services\Database\MySQL\Traits;
+use Database\MySQL\Select;
+use Exception;
 
 trait ColumnsTrait
 {

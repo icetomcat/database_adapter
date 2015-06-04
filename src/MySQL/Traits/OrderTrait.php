@@ -1,6 +1,8 @@
 <?php
 
-namespace Services\Database\MySQL\Traits;
+namespace Database\MySQL\Traits;
+
+use Exception;
 
 trait OrderTrait
 {
@@ -16,7 +18,7 @@ trait OrderTrait
 			}
 			else
 			{
-				throw new \Exception();
+				throw new Exception();
 			}
 		}
 		else
@@ -45,13 +47,13 @@ trait OrderTrait
 					}
 					else
 					{
-						throw new \Exception();
+						throw new Exception();
 					}
 				}
 			}
 			else
 			{
-				throw new \Exception();
+				throw new Exception();
 			}
 			return implode(", ", $stack);
 		}

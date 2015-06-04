@@ -1,6 +1,9 @@
 <?php
 
-namespace Services\Database\MySQL\Traits;
+namespace Database\MySQL\Traits;
+
+use Database\MySQL\Select;
+use Exception;
 
 trait WhereTrait
 {
@@ -146,7 +149,7 @@ trait WhereTrait
 					else
 					{
 						//return "({$column} BETWEEN {$this->quote($value[0])} AND {$this->quote($value[1])})";
-						throw new \Exception();
+						throw new Exception();
 					}
 				}
 			}
@@ -230,7 +233,7 @@ trait WhereTrait
 					}
 					else
 					{
-						throw new \Exception();
+						throw new Exception();
 					}
 				}
 			}

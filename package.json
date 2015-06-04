@@ -1,0 +1,25 @@
+{
+  "name": "database_adapter",
+  "version": "0.0.0",
+  "description": "",
+  "main": "none",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "author": "icetomcat",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp-notify": "~2.2.0",
+    "require-dir": "~0.3.0",
+    "gulp-util": "~3.0.5",
+    "gulp-phpunit": "~0.8.1",
+    "gulp": "~3.9.0"
+  }
+}

@@ -1,6 +1,9 @@
 <?php
 
-namespace Services\Database\MySQL\Traits;
+namespace Database\MySQL\Traits;
+
+use Database\MySQL\Select;
+use Exception;
 
 trait TableTrait
 {

@@ -1,8 +1,12 @@
 <?php
 
-namespace Services\Database\MySQL;
+namespace Database\MySQL;
 
-class Select extends \Services\Database\Base\AbstractQuery
+use Database\Base\AbstractQuery;
+use Exception;
+use PDO;
+
+class Select extends AbstractQuery
 {
 
 	use Traits\ColumnsTrait,
@@ -52,7 +56,7 @@ class Select extends \Services\Database\Base\AbstractQuery
 
 			if (!$result)
 			{
-				throw new \Exception();
+				throw new Exception();
 			}
 
 			$this->raw_query = $result;
@@ -63,12 +67,12 @@ class Select extends \Services\Database\Base\AbstractQuery
 
 	public function fetch()
 	{
-		return $this->getStatment()->fetch(\PDO::FETCH_ASSOC);
+		return $this->getStatment()->fetch(PDO::FETCH_ASSOC);
 	}
 
 	public function fetchAll()
 	{
-		return $this->getStatment()->fetchAll(\PDO::FETCH_ASSOC);
+		return $this->getStatment()->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 }
