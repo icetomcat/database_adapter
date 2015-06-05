@@ -71,12 +71,12 @@ class Adapter
 					}
 
 					$commands[] = 'SET SQL_MODE=ANSI_QUOTES';
-					$this->namespace = "Services\\Database\\MySQL\\";
+					$this->namespace = "Database\\MySQL\\";
 					break;
 
 				case 'pgsql':
 					$dsn = $type . ':host=' . $this->config["host"] . ($is_port ? ';port=' . $port : '') . ';dbname=' . $this->config["dbname"];
-					$this->namespace = "Services\\Database\\MySQL\\";
+					$this->namespace = "Database\\MySQL\\";
 					break;
 
 				case 'sybase':
@@ -97,12 +97,12 @@ class Adapter
 							'dblib:host=' . $this->config["host"] . ($is_port ? ':' . $port : '') . ';dbname=' . $this->config["dbname"];
 
 					$commands[] = 'SET QUOTED_IDENTIFIER ON';
-					$this->namespace = "Services\\Database\\MySQL\\";
+					$this->namespace = "Database\\MySQL\\";
 					break;
 
 				case 'sqlite':
 					$dsn = $type . ':' . $this->config["database_file"];
-					$this->namespace = "Services\\Database\\MySQL\\";
+					$this->namespace = "Database\\MySQL\\";
 					break;
 			}
 
@@ -260,32 +260,6 @@ class Adapter
 		$query["columns"] = ["COUNT" => ["*"]];
 		return 0 + ($this->query($this->select($query))->fetchColumn());
 	}
-
-	/*
-	  public function max($table, $join = [], $column = [], $where = [])
-	  {
-	  $max = $this->query($this->selectContext($table, $join, $column, $where, 'MAX'))->fetchColumn();
-
-	  return is_numeric($max) ? $max + 0 : $max;
-	  }
-
-	  public function min($table, $join = [], $column = [], $where = [])
-	  {
-	  $min = $this->query($this->selectContext($table, $join, $column, $where, 'MIN'))->fetchColumn();
-
-	  return is_numeric($min) ? $min + 0 : $min;
-	  }
-
-	  public function avg($table, $join = [], $column = [], $where = [])
-	  {
-	  return 0 + ($this->query($this->selectContext($table, $join, $column, $where, 'AVG'))->fetchColumn());
-	  }
-
-	  public function sum($table, $join = [], $column = [], $where = [])
-	  {
-	  return 0 + ($this->query($this->selectContext($this->config[""] . $table, $join, $column, $where, 'SUM'))->fetchColumn());
-	  }
-	 */
 
 	public function error()
 	{
