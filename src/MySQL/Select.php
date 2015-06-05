@@ -43,7 +43,7 @@ class Select extends AbstractQuery
 			}
 			if ($where_section)
 			{
-				$result .= " WHETE {$where_section}";
+				$result .= " WHERE {$where_section}";
 			}
 			if ($order_section)
 			{
