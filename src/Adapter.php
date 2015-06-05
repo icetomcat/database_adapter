@@ -3,7 +3,6 @@
 namespace Database;
 
 use Exception;
-use J;
 use PDO;
 use PDOException;
 
@@ -15,7 +14,7 @@ class Adapter
 	 * @var array
 	 */
 	protected $config = array();
-			
+
 	/**
 	 *
 	 * @var PDO
@@ -31,9 +30,9 @@ class Adapter
 	protected $transaction = false;
 	protected $namespace = "";
 
-	public function __construct()
+	public function __construct(array $config = [])
 	{
-		$this->config = J::config()["database"];
+		$this->config = $config;
 		$this->prefix = $this->config["prefix"];
 		$this->connect();
 	}
@@ -123,7 +122,6 @@ class Adapter
 		{
 			throw new Exception($e->getMessage());
 		}
-
 	}
 
 	public function startTransaction()
