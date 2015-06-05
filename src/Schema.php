@@ -7,6 +7,7 @@ use Exception;
 
 class Schema implements ISchema
 {
+
 	/**
 	 *
 	 * @var string 
@@ -242,11 +243,26 @@ class Schema implements ISchema
 		return $this;
 	}
 
-	public function addIndex($role, $column, $group = "")
+	public function addUniqueIndex($column, $group = "")
+	{
+		$this->addSomeIndex(self::ROLE_UNIQUE, $column, $group);
+	}
+
+	public function addIndex($column, $group = "")
+	{
+		$this->addSomeIndex(self::ROLE_INDEX, $column, $group);
+	}
+
+	public function addPrimaryIndex($column, $group = "")
+	{
+		$this->addSomeIndex(self::ROLE_PRIMARY, $column, $group);
+	}
+
+	protected function addSomeIndex($role, $column, $group = "")
 	{
 		if ($role == self::ROLE_PRIMARY)
 		{
-			if($group)
+			if ($group)
 			{
 				trigger_error("Maybe error");
 			}
@@ -254,7 +270,7 @@ class Schema implements ISchema
 		}
 		elseif ($role == self::ROLE_INDEX || $role == self::ROLE_UNIQUE)
 		{
-			if($group)
+			if ($group)
 			{
 				$this->combinedIndexes[$role][$group][] = $column;
 			}
@@ -265,4 +281,5 @@ class Schema implements ISchema
 		}
 		return $this;
 	}
+
 }
