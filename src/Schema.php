@@ -104,6 +104,7 @@ class Schema implements ISchema
 	public function addCombinedIndex($index, $columns)
 	{
 		$this->combinedIndexes[$index][] = $columns;
+		return $this;
 	}
 
 	public function addColumn(Type $column)
@@ -124,6 +125,7 @@ class Schema implements ISchema
 		$this->exclude[] = $column->getName();
 		$this->columns[] = $column;
 		$this->current = $column;
+		return $this;
 	}
 
 	/**
@@ -246,16 +248,19 @@ class Schema implements ISchema
 	public function addUniqueIndex($column, $group = "")
 	{
 		$this->addSomeIndex(self::ROLE_UNIQUE, $column, $group);
+		return $this;
 	}
 
 	public function addIndex($column, $group = "")
 	{
 		$this->addSomeIndex(self::ROLE_INDEX, $column, $group);
+		return $this;
 	}
 
 	public function addPrimaryIndex($column, $group = "")
 	{
 		$this->addSomeIndex(self::ROLE_PRIMARY, $column, $group);
+		return $this;
 	}
 
 	protected function addSomeIndex($role, $column, $group = "")
