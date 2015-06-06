@@ -10,7 +10,7 @@ abstract class AbstractQuery
 
 	protected $query;
 	protected $context = [];
-	protected $params = [];
+	protected $params;
 	protected $raw_query = null;
 
 	/**
@@ -23,7 +23,7 @@ abstract class AbstractQuery
 	{
 		$this->query = $query;
 		$this->context = $context;
-		$this->params = $params;
+		$this->params = &$params;
 
 		if (!isset($this->context["prefix"]))
 		{
@@ -93,7 +93,7 @@ abstract class AbstractQuery
 		return implode(",", $temp);
 	}
 
-	public function execute($params = null)
+	public function execute(array $params = [])
 	{
 		if (!isset($this->context["adapter"]))
 		{
@@ -108,7 +108,7 @@ abstract class AbstractQuery
 			}
 		}
 
-		$this->statment = $this->context["adapter"]->statment($this->getRawQuery());
+		$this->statment = $this->context["adapter"]->statment($this->getRawQuery());		
 		return $this->statment->execute($this->params);
 	}
 

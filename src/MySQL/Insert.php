@@ -59,7 +59,7 @@ class Insert extends AbstractQuery
 		return $this->raw_query;
 	}
 
-	public function execute($params = null)
+	public function execute(array $params = [])
 	{
 		parent::execute($params);
 		return $this->context["adapter"]->lastInsertId();
