@@ -38,8 +38,8 @@ class Insert extends AbstractQuery
 					case 'array':
 						preg_match("/\(JSON\)\s*([\w]+)/i", $key, $column_match);
 						$this->addParam(isset($column_match[0]) ?
-										$this->quote(json_encode($value)) :
-										$this->quote(serialize($value)), $key);
+										json_encode($value) :
+										serialize($value), $key);
 						break;
 
 					case 'boolean':

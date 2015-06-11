@@ -2,7 +2,7 @@
 
 namespace Database\Base;
 
-use Exception;
+use Database\Exceptions\NoAdapterException;
 use PDOStatement;
 
 abstract class AbstractQuery
@@ -87,7 +87,7 @@ abstract class AbstractQuery
 
 		foreach ($array as $value)
 		{
-			$temp[] = is_int($value) ? $value : $this->addParam($value);
+			$temp[] = is_int($value) ? $value : is_float($value) ? $value : $this->addParam($value);
 		}
 
 		return implode(",", $temp);
@@ -97,7 +97,7 @@ abstract class AbstractQuery
 	{
 		if (!isset($this->context["adapter"]))
 		{
-			throw new Exception();
+			throw new NoAdapterException();
 		}
 
 		if (is_array($params))
