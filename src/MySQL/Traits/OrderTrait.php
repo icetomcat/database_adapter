@@ -39,15 +39,40 @@ trait OrderTrait
 			}
 			elseif (is_array($order))
 			{
-				foreach ($order as $value)
+				foreach ($order as $key => $value)
 				{
 					if (is_string($value))
 					{
 						array_push($stack, $this->makeOrder($value));
 					}
-					else
+					elseif (is_array($value))
 					{
-						throw new Exception();
+						switch ($key)
+						{
+							case "FIELD":
+								if (isset($value[0]) && isset($value[1]) && is_string($value[0]))
+								{
+									$column = $this->makeColumn(0, array_shift($value));
+									array_push($stack, "FIELD($column, {$this->arrayQuote($value)})");
+								}
+								break;
+							case "FIELD_IN_SET":
+								if (isset($value[0]) && isset($value[1]) && is_string($value[0]))
+								{
+									$column = $this->makeColumn(0, array_shift($value));
+									if (count($value) == 1)
+									{
+										array_push($stack, "FIELD_IN_SET($column, {$this->addParam($value)})");
+									}
+									else
+									{
+										array_push($stack, "FIELD_IN_SET($column, {$this->arrayQuote($value)})");
+									}
+								}
+								break;
+							default:
+								throw new Exception();
+						}
 					}
 				}
 			}
@@ -59,5 +84,4 @@ trait OrderTrait
 		}
 		return null;
 	}
-
 }
