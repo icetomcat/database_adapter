@@ -1,16 +1,18 @@
 <?php
 
-class Order extends \Database\Base\AbstractQuery
+use Database\Base\AbstractQuery;
+
+class Order extends AbstractQuery
 {
 
-	use Database\MySQL\Traits\ColumnsTrait;
-
-use Database\MySQL\Traits\OrderTrait;
+	use Database\MySQL\Traits\ColumnsTrait,
+	 Database\MySQL\Traits\OrderTrait;
 
 	public function getRawQuery()
 	{
 		return $this->makeOrderSection();
 	}
+
 }
 
 class OrderTest extends PHPUnit_Framework_TestCase
@@ -33,7 +35,7 @@ class OrderTest extends PHPUnit_Framework_TestCase
 		$order = new Order(["order" => ["FIELD" => ["category_id", 1, 2, 3, 4, 5]]]);
 		$this->assertEquals($order->getRawQuery(), "FIELD(`category_id`, 1,2,3,4,5)");
 	}
-	
+
 	public function testOrderByFieldWithMixedData()
 	{
 		$order = new Order(["order" => ["FIELD" => ["category_id", 1, "2", 3.5]]]);
@@ -45,4 +47,5 @@ class OrderTest extends PHPUnit_Framework_TestCase
 		$order = new Order(["order" => ["FIELD_IN_SET" => ["category_id", "1, 2, 3, 4, 5"]]]);
 		$this->assertEquals($order->getRawQuery(), "FIELD_IN_SET(`category_id`, ?)");
 	}
+
 }

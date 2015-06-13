@@ -55,16 +55,16 @@ class Schema implements ISchema
 	 * 
 	 * @param string $name
 	 * @param Type[] $columns
-	 * @param array $combined_indexes ['PRIMARY' => [[id, col1, col2, ...]], 'UNIQUE' => [[col1,col2,col3],[col1,col4], ...], 'INDEX' => [[col1,col2,col3],[col1,col4], ...]]
-	 * @param string[] $relations ['table_name1', 'table_name2']
+	 * @param array $combined_indexes ["PRIMARY" => [[id, col1, col2, ...]], "UNIQUE" => [[col1,col2,col3],[col1,col4], ...], "INDEX" => [[col1,col2,col3],[col1,col4], ...]]
+	 * @param string[] $relations ["table_name1", "table_name2"]
 	 * @param string $engine MyISAM | InnoDB | Memory ...
 	 * @param string $collate utf8_general_ci ...
 	 */
 	public function __construct($name, $columns = [], $combined_indexes = [], $engine = "InnoDB", $collate = "utf8_general_ci", $charset = "utf8")
 	{
-		if (rtrim($name) == '')
+		if (rtrim($name) == "")
 		{
-			trigger_error('', E_USER_ERROR);
+			trigger_error("", E_USER_ERROR);
 		}
 		$this->name = $name;
 		$this->columns = $columns;
@@ -76,7 +76,7 @@ class Schema implements ISchema
 		{
 			if (in_array($column->getName(), $this->exclude))
 			{
-				trigger_error($column->getName() . ': this column is not acceptable', E_USER_WARNING);
+				trigger_error($column->getName() . ": this column is not acceptable", E_USER_WARNING);
 				unset($this->columns[$key]);
 			}
 			else
@@ -111,7 +111,7 @@ class Schema implements ISchema
 	{
 		if (in_array($column->getName(), $this->exclude))
 		{
-			//trigger_error($this->name() . "." . $column->getName() . ': this column is not acceptable', E_USER_WARNING);
+			//trigger_error($this->name() . "." . $column->getName() . ": this column is not acceptable", E_USER_WARNING);
 			throw new Exception();
 		}
 		if ($column->getIndex() == self::ROLE_PRIMARY)
@@ -124,7 +124,6 @@ class Schema implements ISchema
 		}
 		$this->exclude[] = $column->getName();
 		$this->columns[] = $column;
-		$this->current = $column;
 		return $this;
 	}
 
@@ -191,80 +190,94 @@ class Schema implements ISchema
 		return $this->charset;
 	}
 
-	public function integer($name, $default = null, $index = '', $autoIncrement = false)
+	public function integer($name, $default = null, $index = "", $autoIncrement = false)
 	{
-		$this->addColumn(new Type($name, "INT", '11', $default, '', $index, $autoIncrement, $default ? true : false));
+		$this->addColumn(Type::integer($name, $default, $index, $autoIncrement));
 		return $this;
 	}
 
-	public function long($name, $default = null, $index = '', $autoIncrement = false)
+	public function long($name, $default = null, $index = "", $autoIncrement = false)
 	{
-		$this->addColumn(new Type($name, "BIGINT", '20', $default, '', $index, $autoIncrement, $default ? true : false));
+		$this->addColumn(Type::long($name, $default, $index, $autoIncrement));
 		return $this;
 	}
 
-	public function string($name, $length = "255", $default = "", $index = "", $collation = "utf8_general_ci")
+	public function string($name, $length = 255, $default = "", $index = "", $collation = "utf8_general_ci")
 	{
-		$this->addColumn(new Type($name, "VARCHAR", $length, $default, $collation, $index, false, $default ? true : false));
+		$this->addColumn(Type::string($name, $length, $default, $index, $collation));
+		return $this;
+	}
+
+	public function char($name, $length = 255, $default = "", $index = "", $collation = "utf8_general_ci")
+	{
+		$this->addColumn(Type::char($name, $length, $default, $index, $collation));
 		return $this;
 	}
 
 	public function text($name, $collation = "utf8_general_ci")
 	{
-		$this->addColumn(new Type($name, "TEXT", "", "", $collation, "", false, false));
+		$this->addColumn(Type::text($name, $collation));
 		return $this;
 	}
 
-	public function date($name, $default = "0000-00-00", $index = '')
+	public function date($name, $default = "0000-00-00", $index = "")
 	{
-		$this->addColumn(new Type($name, "DATE", "", $default, "", $index, false, false));
+		$this->addColumn(Type::date($name, $default, $index));
 		return $this;
 	}
 
-	public function datetime($name, $default = "0000-00-00 00:00:00", $index = '')
+	public function datetime($name, $default = "0000-00-00 00:00:00", $index = "")
 	{
-		$this->addColumn(new Type($name, "DATETIME", "", $default, "", $index, false, false));
+		$this->addColumn(Type::datetime($name, $default, $index));
 		return $this;
 	}
 
 	public function float($name, $default = "0.0")
 	{
-		$this->addColumn(new Type($name, "FLOAT", "", $default, "", '', false, false));
+		$this->addColumn(new Type($name, "FLOAT", "", $default, "", "", false, false));
 		return $this;
 	}
 
 	public function double($name, $default = "0.0")
 	{
-		$this->addColumn(new Type($name, "DOUBLE", "", $default, "", '', false, false));
+		$this->addColumn(Type::double($name, $default));
 		return $this;
 	}
 
-	public function boolean($name, $default = false, $index = '')
+	public function boolean($name, $default = false, $index = "")
 	{
-		$this->addColumn(new Type($name, "TINYINT", 1, $default ? "1" : "0", "", $index, false, true));
+		$this->addColumn(Type::boolean($name, $default, $index));
 		return $this;
 	}
 
-	public function addUniqueIndex($column, $group = "")
+	public function addUniqueIndex($column = null, $group = null)
 	{
 		$this->addSomeIndex(self::ROLE_UNIQUE, $column, $group);
 		return $this;
 	}
 
-	public function addIndex($column, $group = "")
+	public function addIndex($column = null, $group = null)
 	{
 		$this->addSomeIndex(self::ROLE_INDEX, $column, $group);
 		return $this;
 	}
 
-	public function addPrimaryIndex($column, $group = "")
+	public function addPrimaryIndex($column = null, $group = null)
 	{
 		$this->addSomeIndex(self::ROLE_PRIMARY, $column, $group);
 		return $this;
 	}
 
-	protected function addSomeIndex($role, $column, $group = "")
+	protected function addSomeIndex($role, $column = null, $group = null)
 	{
+		if (!$column)
+		{
+			if (!$this->columns)
+			{
+				throw new Exception();
+			}
+			$column = end($this->columns)->getName();
+		}
 		if ($role == self::ROLE_PRIMARY)
 		{
 			if ($group)
@@ -284,7 +297,6 @@ class Schema implements ISchema
 				$this->combinedIndexes[$role][] = [$column];
 			}
 		}
-		return $this;
 	}
 
 }

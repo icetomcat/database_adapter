@@ -21,6 +21,8 @@ interface ISchema
 
 	public function long($name, $default = null, $index = '', $autoIncrement = false);
 
+	public function char($name, $length = 255, $default = "", $index = "", $collation = "utf8_general_ci");
+
 	public function string($name, $length = 255, $default = "", $index = "", $collation = "utf8_general_ci");
 
 	public function text($name, $collation = "utf8_general_ci");
