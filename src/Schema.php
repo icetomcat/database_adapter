@@ -89,22 +89,16 @@ class Schema implements ISchema
 		{
 			if ($column->getIndex() == self::ROLE_PRIMARY)
 			{
-				$this->combinedIndexes[$column->getIndex()][1][] = $column->getName();
+				$this->combinedIndexes["PRIMARY"][$column->getIndex()][] = $column->getName();
 			}
 			elseif ($column->getIndex() == self::ROLE_INDEX || $column->getIndex() == self::ROLE_UNIQUE)
 			{
-				$this->combinedIndexes[$column->getIndex()][] = [$column->getName()];
+				$this->combinedIndexes[$column->getName()][$column->getIndex()][] = $column->getName();
 			}
 		}
 
 		$this->engine = $engine;
 		$this->collate = $collate;
-	}
-
-	public function addCombinedIndex($index, $columns)
-	{
-		$this->combinedIndexes[$index][] = $columns;
-		return $this;
 	}
 
 	public function addColumn(Type $column)
@@ -116,11 +110,11 @@ class Schema implements ISchema
 		}
 		if ($column->getIndex() == self::ROLE_PRIMARY)
 		{
-			$this->combinedIndexes[$column->getIndex()][1][] = $column->getName();
+			$this->combinedIndexes["PRIMARY"][$column->getIndex()][] = $column->getName();
 		}
 		elseif ($column->getIndex() == self::ROLE_INDEX || $column->getIndex() == self::ROLE_UNIQUE)
 		{
-			$this->combinedIndexes[$column->getIndex()][] = [$column->getName()];
+			$this->combinedIndexes[$column->getName()][$column->getIndex()][] = $column->getName();
 		}
 		$this->exclude[] = $column->getName();
 		$this->columns[] = $column;
@@ -278,23 +272,27 @@ class Schema implements ISchema
 			}
 			$column = end($this->columns)->getName();
 		}
+		if (!$group)
+		{
+			$group = $column;
+		}
 		if ($role == self::ROLE_PRIMARY)
 		{
 			if ($group)
 			{
 				trigger_error("Maybe error");
 			}
-			$this->combinedIndexes[$role][1][] = $column;
+			$this->combinedIndexes["PRIMARY"][$role][] = $column;
 		}
 		elseif ($role == self::ROLE_INDEX || $role == self::ROLE_UNIQUE)
 		{
-			if ($group)
+			if (!isset($this->combinedIndexes[$group]) || (isset($this->combinedIndexes[$group][$role])))
 			{
-				$this->combinedIndexes[$role][$group][] = $column;
+				$this->combinedIndexes[$group][$role][] = $column;
 			}
 			else
 			{
-				$this->combinedIndexes[$role][] = [$column];
+				throw new \Exception();
 			}
 		}
 	}

@@ -2,6 +2,7 @@
 
 namespace Database;
 
+use Database\Interfaces\ISchema;
 use Exception;
 use PDO;
 use PDOException;
@@ -266,7 +267,7 @@ class Adapter
 		return $this->pdo->errorInfo();
 	}
 
-	protected function getSQLField($type)
+	protected function getSQLField($type, $without_auto_increment = false)
 	{
 		$result = "`" . $type->getName() . "` " . $type->getType() . "";
 		if (!empty($type->getLength()))
@@ -294,7 +295,7 @@ class Adapter
 		{
 			$result .= " DEFAULT '" . $type->getDefault() . "'";
 		}
-		if ($type->isAutoIncrement())
+		if ($type->isAutoIncrement() && !$without_auto_increment)
 		{
 			$result .= " auto_increment";
 		}
@@ -385,21 +386,12 @@ class Adapter
 			$column['NON_UNIQUE'] = 1;
 			$meta[$column['COLUMN_NAME']] = $column;
 		}
-		$query = $this->getIndexesInfo($this->prefix . $table->getName());
-		$key_column_usage = [];
-		foreach ($query as $value)
-		{
-			$key_column_usage[$value['Key_name']][] = $value['Column_name'];
-			$meta[$value['Column_name']]['NON_UNIQUE'] = $value['Non_unique'];
-			$meta[$value['Column_name']]['COLUMN_KEY'] = $value['Key_name'];
-		}
 
 		foreach ($table->getColumns() as $column)
 		{
 
 			if (!isset($meta[$column->getName()]))
 			{
-				//add field
 				$changes[] = "ADD " . $this->getSQLField($column);
 			}
 			else
@@ -416,99 +408,82 @@ class Adapter
 			}
 		}
 
-		foreach ($table->getCombinedIndexes() as $key => $groups)
+		foreach ($this->getIndexesInfo($this->prefix . $table->getName()) as $index)
 		{
-			foreach ($groups as $cols)
+			$indexes[$index["Key_name"]][$index["Column_name"]] = $index;
+		}
+		$table_indexes = $table->getCombinedIndexes();
+		$non_unique = ["PRIMARY" => 0, "UNIQUE" => 0, "INDEX" => 1];
+
+		foreach ($table_indexes as $key => $groups)
+		{
+			foreach ($groups as $index_type => $group)
 			{
-				if (is_array($cols))
+				$isGoodIndex = true;
+				if (isset($indexes[$key]))
 				{
-					$constraint_name = '';
-					foreach ($key_column_usage as $constraint => $cols_name)
+					if (count($group) != count($indexes[$key]))
 					{
-						if (count($cols) == count($cols_name))
+						$isGoodIndex = false;
+					}
+					if ($non_unique[$index_type] != reset($indexes[$key])["Non_unique"])
+					{
+						$isGoodIndex = false;
+					}
+					if ($isGoodIndex)
+					{
+						foreach ($group as $column)
 						{
-							if (count(array_diff($cols, $cols_name)) == 0)
+							if (!isset($indexes[$key][$column]))
 							{
-								$constraint_name = "`$constraint`";
-								unset($key_column_usage[$constraint]);
+								$isGoodIndex = false;
 								break;
 							}
 						}
 					}
-					switch ($key)
+
+					if (!$isGoodIndex)
 					{
-						case 'INDEX':
-							switch (isset($meta[$cols[0]]) ? $meta[$cols[0]]["COLUMN_KEY"] : '')
-							{
-								case 'PRI':
-								case 'PRIMARY':
-									$changes[] = "DROP PRIMARY KEY $constraint_name";
+						if ($index_type == "PRIMARY")
+						{
+							$changes[] = "DROP PRIMARY KEY";
+						}
+						else
+						{
+							$changes[] = "DROP INDEX $key";
+						}
+					}
 
-								case '':
-									$changes[] = "ADD INDEX(" . "`" . implode("`,`", $cols) . "`" . ")";
-									break;
-								default:
-									if ($meta[$cols[0]]["NON_UNIQUE"] == '0')
-									{
-										if (!empty($constraint_name))
-											$changes[] = "DROP INDEX $constraint_name";
+					unset($indexes[$key]);
+				}
+				else
+				{
+					$isGoodIndex = false;
+				}
 
-										$changes[] = "ADD INDEX $constraint_name (" . "`" . implode("`,`", $cols) . "`" . ")";
-									}
-									break;
-							}
-							break;
-						case 'UNIQUE':
-							switch (isset($meta[$cols[0]]) ? $meta[$cols[0]]["COLUMN_KEY"] : '')
-							{
-								case 'PRI':
-								case 'PRIMARY':
-									$changes[] = "DROP PRIMARY KEY $constraint_name";
-								case '':
-									$changes[] = "ADD UNIQUE(" . "`" . implode("`,`", $cols) . "`" . ")";
-									break;
-								case 'MUL':
-									if (!empty($constraint_name))
-									{
-										$changes[] = "DROP INDEX $constraint_name";
-									}
-
-									$changes[] = "ADD UNIQUE $constraint_name(" . "`" . implode("`,`", $cols) . "`" . ")";
-									break;
-							}
-							break;
-						case 'PRIMARY':
-							switch (isset($meta[$cols[0]]) ? $meta[$cols[0]]["COLUMN_KEY"] : '')
-							{
-								case 'PRI': break;
-								case 'PRIMARY': break;
-								case '':
-									$changes[] = "ADD PRIMARY KEY(" . "`" . implode("`,`", $cols) . "`" . ")";
-									break;
-								default:
-									if (!empty($constraint_name))
-									{
-										$changes[] = "DROP INDEX $constraint_name";
-									}
-
-									$changes[] = "ADD PRIMARY KEY(" . "`" . implode("`,`", $cols) . "`" . ")";
-									break;
-							}
-							break;
+				if (!$isGoodIndex)
+				{
+					if ($index_type == "PRIMARY")
+					{
+						$changes[] = "ADD PRIMARY KEY(" . "`" . implode("`,`", $group) . "`" . ")";
+					}
+					else
+					{
+						$changes[] = "ADD $index_type `$key`(" . "`" . implode("`,`", $group) . "`" . ")";
 					}
 				}
 			}
 		}
 
-		foreach ($key_column_usage as $constraint => $cols_name)
+		foreach ($indexes as $key => $group)
 		{
-			switch (isset($meta[$cols_name[0]]) ? $meta[$cols_name[0]]["COLUMN_KEY"] : '')
+			if ($key == "PRIMARY")
 			{
-				case 'PRIMARY': $changes[] = "DROP PRIMARY KEY `$constraint`";
-					break;
-				default:
-					$changes[] = "DROP INDEX `$constraint`";
-					break;
+				$changes[] = "DROP PRIMARY KEY";
+			}
+			else
+			{
+				$changes[] = "DROP INDEX $key";
 			}
 		}
 
