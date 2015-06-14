@@ -345,20 +345,20 @@ class Adapter
 		{
 			if (is_array($groups))
 			{
-				foreach ($groups as $cols)
+				foreach ($groups as $index_type => $group)
 				{
-					if (is_array($cols))
+					if (is_array($group))
 					{
-						switch ($key)
+						switch ($index_type)
 						{
 							case 'PRIMARY':
-								$sql .= ",PRIMARY KEY(" . "`" . implode("`,`", $cols) . "`" . ")";
+								$sql .= ",PRIMARY KEY(" . "`" . implode("`,`", $group) . "`" . ")";
 								break;
 							case 'UNIQUE':
-								$sql .= ",UNIQUE(" . "`" . implode("`,`", $cols) . "`" . ")";
+								$sql .= ",UNIQUE $key(" . "`" . implode("`,`", $group) . "`" . ")";
 								break;
 							case 'INDEX':
-								$sql .= ",INDEX(" . "`" . implode("`,`", $cols) . "`" . ")";
+								$sql .= ",INDEX $key(" . "`" . implode("`,`", $group) . "`" . ")";
 								break;
 						}
 					}
