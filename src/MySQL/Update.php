@@ -1,8 +1,10 @@
 <?php
 
-namespace Services\Database\MySQL;
+namespace Database\MySQL;
 
-class Update extends \Services\Database\Base\AbstractQuery
+use Database\Base\AbstractQuery;
+
+class Update extends AbstractQuery
 {
 
 	use Traits\ColumnsTrait,
@@ -53,7 +55,7 @@ class Update extends \Services\Database\Base\AbstractQuery
 						case 'integer':
 						case 'double':
 						case 'string':
-							$fields[] = $column . ' = ' . $this->addParam($value, $key);
+							$fields[] = $column . ' = ' . $this->addParam($value);
 							break;
 					}
 				}
