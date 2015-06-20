@@ -15,10 +15,13 @@ class Delete extends AbstractQuery
 	{
 		if (!$this->raw_query)
 		{
-
-			$this->raw_query = 'DELETE FROM `' . $this->context["prefix"] . $this->query["table"] . '` WHERE ' . $this->makeWhereSection();
+			$where_section = $this->makeWhereSection();
+			$this->raw_query = 'DELETE FROM `' . $this->context["prefix"] . $this->query["table"] . '`';
+			if ($where_section)
+			{
+				$this->raw_query .= "WHERE {$where_section}";
+			}
 		}
 		return $this->raw_query;
 	}
-
 }

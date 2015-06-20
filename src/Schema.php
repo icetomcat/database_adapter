@@ -189,6 +189,12 @@ class Schema implements ISchema
 		$this->addColumn(Type::integer($name, $default, $index, $autoIncrement));
 		return $this;
 	}
+	
+	public function unsigned($name, $default = null, $index = "", $autoIncrement = false)
+	{
+		$this->addColumn(Type::unsigned($name, $default, $index, $autoIncrement));
+		return $this;
+	}
 
 	public function long($name, $default = null, $index = "", $autoIncrement = false)
 	{
@@ -223,6 +229,12 @@ class Schema implements ISchema
 	public function datetime($name, $default = "0000-00-00 00:00:00", $index = "")
 	{
 		$this->addColumn(Type::datetime($name, $default, $index));
+		return $this;
+	}
+	
+	public function timestamp($name, $default = "0000-00-00 00:00:00", $index = "", $attribute = "")
+	{
+		$this->addColumn(Type::timestamp($name, $default, $index, $attribute));
 		return $this;
 	}
 

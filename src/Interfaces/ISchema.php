@@ -30,6 +30,16 @@ interface ISchema
 	 * @param string $name
 	 * @param string $default
 	 * @param string $index
+	 * @param boolean $autoIncrement
+	 * @return ISchema
+	 */
+	public function unsigned($name, $default = null, $index = "", $autoIncrement = false);
+
+	/**
+	 * 
+	 * @param string $name
+	 * @param string $default
+	 * @param string $index
 	 * @param string $autoIncrement
 	 * @return ISchema
 	 */
@@ -82,6 +92,16 @@ interface ISchema
 	 * @return ISchema
 	 */
 	public function datetime($name, $default = "0000-00-00 00:00:00", $index = '');
+
+	/**
+	 * 
+	 * @param string $name
+	 * @param string $default
+	 * @param string $index
+	 * @param string $attribute
+	 * @return ISchema
+	 */
+	public function timestamp($name, $default = "0000-00-00 00:00:00", $index = "", $attribute = "");
 
 	/**
 	 * 

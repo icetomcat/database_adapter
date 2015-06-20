@@ -267,18 +267,18 @@ class Adapter
 		return $this->pdo->errorInfo();
 	}
 
-	protected function getSQLField($type, $without_auto_increment = false)
+	protected function getSQLField(Type $type, $without_auto_increment = false)
 	{
 		$result = "`" . $type->getName() . "` " . $type->getType() . "";
-		if (!empty($type->getLength()))
+		if ($type->getLength())
 		{
 			$result .= "(" . $type->getLength() . ")";
 		}
-		if (!empty($type->getAttribute()))
+		if ($type->getAttribute())
 		{
 			$result .= " {$type->getAttribute()}";
 		}
-		if ($type->getCollate() != "")
+		if ($type->getCollate())
 		{
 			$charset = explode("_", $type->getCollate(), 2);
 			$result .= " CHARACTER SET " . $charset[0] . " COLLATE " . $type->getCollate();
@@ -291,9 +291,16 @@ class Adapter
 		{
 			$result .= " NOT NULL";
 		}
-		if (!is_null($type->getDefault()) && ($type->getDefault() !== ""))
+		if ($type->getDefault())
 		{
-			$result .= " DEFAULT '" . $type->getDefault() . "'";
+			if ($type->getDefault()[0] == "#")
+			{
+				$result .= " DEFAULT " . substr($type->getDefault(), -strlen($type->getDefault()) + 1);
+			}
+			else
+			{
+				$result .= " DEFAULT '{$type->getDefault()}'";
+			}
 		}
 		if ($type->isAutoIncrement() && !$without_auto_increment)
 		{

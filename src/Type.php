@@ -6,6 +6,7 @@ use Database\Interfaces\IType;
 
 class Type implements IType
 {
+
 	protected $name;
 	protected $type;
 	protected $length;
@@ -26,111 +27,122 @@ class Type implements IType
 	 * @param bool $autoIncrement автоинкремент
 	 * @param bool $null нуль
 	 */
-	function __construct($name, $type, $length = "", $default = "", $collate = "", $index = "", $autoIncrement = false, $null = false, $attribute = "")
+	public function __construct($name, $type, $length = "", $default = "", $collate = "", $index = "", $autoIncrement = false, $null = false, $attribute = "")
 	{
-		$this->name			 = $name;
-		$this->type			 = $type;
-		$this->length		 = $length;
-		$this->default		 = is_null($default) ? "" : $default;
-		$this->collate		 = $collate;
-		$this->index		 = $index;
+		$this->name = $name;
+		$this->type = $type;
+		$this->length = $length;
+		$this->default = is_null($default) ? "" : $default;
+		$this->collate = $collate;
+		$this->index = $index;
 		$this->autoIncrement = $autoIncrement;
-		$this->null			 = $null;
-		$this->attribute	 = $attribute;
+		$this->null = $null;
+		$this->attribute = $attribute;
 	}
 
-	function getName()
+	public function getName()
 	{
 		return $this->name;
 	}
 
-	function getType()
+	public function getType()
 	{
 		return $this->type;
 	}
 
-	function getLength()
+	public function getLength()
 	{
 		return $this->length;
 	}
 
-	function getIndex()
+	public function getIndex()
 	{
 		return $this->index;
 	}
 
-	function isNull()
+	public function isNull()
 	{
 		return $this->null;
 	}
 
-	function getCollate()
+	public function getCollate()
 	{
 		return $this->collate;
 	}
 
-	function getDefault()
+	public function getDefault()
 	{
 		return $this->default;
 	}
 
-	function isAutoIncrement()
+	public function isAutoIncrement()
 	{
 		return $this->autoIncrement;
 	}
 
-	function getAttribute()
+	public function getAttribute()
 	{
 		return $this->attribute;
 	}
 
-	public static function integer($name, $default = null, $index = "", $autoIncrement = false)
+	static public function integer($name, $default = null, $index = "", $autoIncrement = false)
 	{
 		return new Type($name, "INT", "11", $default, "", $index, $autoIncrement, $default ? true : false);
 	}
-	
-	public static function long($name, $default = null, $index = "", $autoIncrement = false)
+
+	static public function unsigned($name, $default = null, $index = "", $autoIncrement = false)
+	{
+		return new Type($name, "INT", "11", $default, "", $index, $autoIncrement, $default ? true : false, "UNSIGNED");
+	}
+
+	static public function long($name, $default = null, $index = "", $autoIncrement = false)
 	{
 		return new Type($name, "BIGINT", "20", $default, "", $index, $autoIncrement, $default ? true : false);
 	}
 
-	public static function char($name, $length = "255", $default = "", $index = "", $collation = "utf8_general_ci")
+	static public function char($name, $length = "255", $default = "", $index = "", $collation = "utf8_general_ci")
 	{
 		return new Type($name, "CHAR", $length, $default, $collation, $index, false, $default ? true : false);
 	}
-	
-	public static function string($name, $length = "255", $default = "", $index = "", $collation = "utf8_general_ci")
+
+	static public function string($name, $length = "255", $default = "", $index = "", $collation = "utf8_general_ci")
 	{
 		return new Type($name, "VARCHAR", $length, $default, $collation, $index, false, $default ? true : false);
 	}
 
-	public static function text($name, $collation = "utf8_general_ci")
+	static public function text($name, $collation = "utf8_general_ci")
 	{
 		return new Type($name, "TEXT", "", "", $collation, "", false, false);
 	}
 
-	public static function date($name, $default = "0000-00-00", $index = "")
+	static public function date($name, $default = "0000-00-00", $index = "")
 	{
 		return new Type($name, "DATE", "", $default, "", $index, false, false);
 	}
 
-	public static function datetime($name, $default = "0000-00-00 00:00:00", $index = "")
+	static public function datetime($name, $default = "0000-00-00 00:00:00", $index = "")
 	{
 		return new Type($name, "DATETIME", "", $default, "", $index, false, false);
 	}
 
-	public static function float($name, $default = "0.0")
+	static public function timestamp($name, $default = "0000-00-00 00:00:00", $index = "", $attribute = "")
+	{
+		return new Type($name, "TIMESTAMP", "", $default, "", $index, false, true, $attribute);
+	}
+
+	static public function float($name, $default = "0.0")
 	{
 		return new Type($name, "FLOAT", "", $default, "", "", false, false);
 	}
 
-	public static function double($name, $default = "0.0")
+	static public function double($name, $default = "0.0")
 	{
 		return new Type($name, "DOUBLE", "", $default, "", "", false, false);
 	}
 
-	public static function boolean($name, $default = false, $index = "")
+	static public function boolean($name, $default = false, $index = "")
 	{
 		return new Type($name, "TINYINT", 1, $default ? "1" : "0", "", $index, false, true);
 	}
+
 }
