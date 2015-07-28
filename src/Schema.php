@@ -186,74 +186,62 @@ class Schema implements ISchema
 
 	public function integer($name, $default = null, $index = "", $autoIncrement = false)
 	{
-		$this->addColumn(Type::integer($name, $default, $index, $autoIncrement));
-		return $this;
+		return $this->addColumn(Type::integer($name, $default, $index, $autoIncrement));
 	}
-	
+
 	public function unsigned($name, $default = null, $index = "", $autoIncrement = false)
 	{
-		$this->addColumn(Type::unsigned($name, $default, $index, $autoIncrement));
-		return $this;
+		return $this->addColumn(Type::unsigned($name, $default, $index, $autoIncrement));
 	}
 
 	public function long($name, $default = null, $index = "", $autoIncrement = false)
 	{
-		$this->addColumn(Type::long($name, $default, $index, $autoIncrement));
-		return $this;
+		return $this->addColumn(Type::long($name, $default, $index, $autoIncrement));
 	}
 
 	public function string($name, $length = 255, $default = "", $index = "", $collation = "utf8_general_ci")
 	{
-		$this->addColumn(Type::string($name, $length, $default, $index, $collation));
-		return $this;
+		return $this->addColumn(Type::string($name, $length, $default, $index, $collation));
 	}
 
 	public function char($name, $length = 255, $default = "", $index = "", $collation = "utf8_general_ci")
 	{
-		$this->addColumn(Type::char($name, $length, $default, $index, $collation));
-		return $this;
+		return $this->addColumn(Type::char($name, $length, $default, $index, $collation));
 	}
 
 	public function text($name, $collation = "utf8_general_ci")
 	{
-		$this->addColumn(Type::text($name, $collation));
-		return $this;
+		return $this->addColumn(Type::text($name, $collation));
 	}
 
 	public function date($name, $default = "0000-00-00", $index = "")
 	{
-		$this->addColumn(Type::date($name, $default, $index));
-		return $this;
+		return $this->addColumn(Type::date($name, $default, $index));
 	}
 
 	public function datetime($name, $default = "0000-00-00 00:00:00", $index = "")
 	{
-		$this->addColumn(Type::datetime($name, $default, $index));
-		return $this;
+		return $this->addColumn(Type::datetime($name, $default, $index));
 	}
-	
+
 	public function timestamp($name, $default = "0000-00-00 00:00:00", $index = "", $attribute = "")
 	{
-		$this->addColumn(Type::timestamp($name, $default, $index, $attribute));
-		return $this;
+		return $this->addColumn(Type::timestamp($name, $default, $index, $attribute));
 	}
 
 	public function float($name, $default = "0.0")
 	{
-		$this->addColumn(new Type($name, "FLOAT", "", $default, "", "", false, false));
-		return $this;
+		return $this->addColumn(new Type($name, "FLOAT", "", $default, "", "", false, false));
 	}
 
 	public function double($name, $default = "0.0")
 	{
-		$this->addColumn(Type::double($name, $default));
-		return $this;
+		return $this->addColumn(Type::double($name, $default));
 	}
 
 	public function boolean($name, $default = false, $index = "")
 	{
-		$this->addColumn(Type::boolean($name, $default, $index));
-		return $this;
+		return $this->addColumn(Type::boolean($name, $default, $index));
 	}
 
 	public function addUniqueIndex($column = null, $group = null)
@@ -307,6 +295,7 @@ class Schema implements ISchema
 				throw new \Exception();
 			}
 		}
+		return $this;
 	}
 
 }

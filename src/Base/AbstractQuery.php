@@ -12,6 +12,7 @@ abstract class AbstractQuery
 	protected $context = [];
 	protected $params;
 	protected $raw_query = null;
+	protected $key_iterator = 0;
 
 	/**
 	 *
@@ -66,14 +67,10 @@ abstract class AbstractQuery
 	{
 		if (!$key)
 		{
-			$this->params[] = $param;
-			return "?";
+			$key = "__p" . ($this->key_iterator++);
 		}
-		else
-		{
-			$this->params[":$key"] = $param;
-			return ":$key";
-		}
+		$this->params[":$key"] = $param;
+		return ":$key";
 	}
 
 	protected function columnQuote($string)

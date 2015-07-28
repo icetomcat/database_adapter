@@ -44,8 +44,8 @@ class Update extends AbstractQuery
 							preg_match("/\(JSON\)\s*([\w]+)/i", $key, $column_match);
 
 							$fields[] = isset($column_match[0]) ?
-									$this->columnQuote($column_match[1]) . ' = ' . $this->addParam(json_encode($value)) :
-									$column . ' = ' . $this->addParam(serialize($value));
+									$this->columnQuote($column_match[1]) . ' = ' . $this->addParam(json_encode($value), $key) :
+									$column . ' = ' . $this->addParam(serialize($value), $key);
 							break;
 
 						case 'boolean':
@@ -55,7 +55,7 @@ class Update extends AbstractQuery
 						case 'integer':
 						case 'double':
 						case 'string':
-							$fields[] = $column . ' = ' . $this->addParam($value);
+							$fields[] = $column . ' = ' . $this->addParam($value, $key);
 							break;
 					}
 				}
