@@ -292,7 +292,7 @@ class Adapter
 		{
 			$result .= " NOT NULL";
 		}
-		if ($type->getDefault())
+		if ($type->getDefault() !== null)
 		{
 			if ($type->getDefault()[0] == "#")
 			{
