@@ -118,6 +118,7 @@ class Adapter
 			{
 				$this->pdo->exec($value);
 			}
+			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}
 		catch (PDOException $e)
 		{
@@ -476,7 +477,14 @@ class Adapter
 					}
 					else
 					{
-						$changes[] = "ADD $index_type `$key`(" . "`" . implode("`,`", $group) . "`" . ")";
+						if (count($group) > 1)
+						{
+							$changes[] = "ADD $index_type `$key`(" . "`" . implode("`,`", $group) . "`" . ")";
+						}
+						else
+						{
+							$changes[] = "ADD $index_type (" . "`" . implode("`,`", $group) . "`" . ")";
+						}
 					}
 				}
 			}
