@@ -243,6 +243,21 @@ class Schema implements ISchema
 	{
 		return $this->addColumn(Type::boolean($name, $default, $index));
 	}
+	
+	public function unique()
+	{
+		return $this->addUniqueIndex();
+	}
+	
+	public function index()
+	{
+		return $this->addIndex();
+	}
+	
+	public function primary()
+	{
+		return $this->addPrimaryIndex();
+	}
 
 	public function addUniqueIndex($column = null, $group = null)
 	{
