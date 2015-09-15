@@ -32,7 +32,7 @@ class Type implements IType
 		$this->name = $name;
 		$this->type = $type;
 		$this->length = $length;
-		$this->default = is_null($default) ? "" : $default;
+		$this->default = is_null($default) ? null : $default;
 		$this->collate = $collate;
 		$this->index = $index;
 		$this->autoIncrement = $autoIncrement;
