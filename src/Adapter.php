@@ -294,7 +294,7 @@ class Adapter
 		}
 		if ($type->getDefault() !== null)
 		{
-			if ($type->getDefault()[0] == "#")
+			if (is_string($type->getDefault()) && (strlen($type->getDefault()) > 0) && $type->getDefault()[0] == "#")
 			{
 				$result .= " DEFAULT " . substr($type->getDefault(), -strlen($type->getDefault()) + 1);
 			}

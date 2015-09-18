@@ -27,12 +27,12 @@ class Type implements IType
 	 * @param bool $autoIncrement автоинкремент
 	 * @param bool $null нуль
 	 */
-	public function __construct($name, $type, $length = "", $default = "", $collate = "", $index = "", $autoIncrement = false, $null = false, $attribute = "")
+	public function __construct($name, $type, $length = null, $default = null, $collate = null, $index = null, $autoIncrement = false, $null = false, $attribute = null)
 	{
 		$this->name = $name;
 		$this->type = $type;
 		$this->length = $length;
-		$this->default = is_null($default) ? null : $default;
+		$this->default = $default;
 		$this->collate = $collate;
 		$this->index = $index;
 		$this->autoIncrement = $autoIncrement;
@@ -83,6 +83,11 @@ class Type implements IType
 	public function getAttribute()
 	{
 		return $this->attribute;
+	}
+
+	public function setDefault($value = null)
+	{
+		$this->default = $value;
 	}
 
 	static public function integer($name, $default = null, $index = "", $autoIncrement = false)

@@ -74,14 +74,14 @@ class Schema implements ISchema
 
 		foreach ($this->columns as $key => $column)
 		{
-			if (in_array($column->getName(), $this->exclude))
+			if (isset($this->exclude[$column->getName()]))
 			{
 				trigger_error($column->getName() . ": this column is not acceptable", E_USER_WARNING);
 				unset($this->columns[$key]);
 			}
 			else
 			{
-				$this->exclude[] = $column->getName();
+				$this->exclude[$column->getName()] = $column->getName();
 			}
 		}
 
@@ -89,11 +89,11 @@ class Schema implements ISchema
 		{
 			if ($column->getIndex() == self::ROLE_PRIMARY)
 			{
-				$this->combinedIndexes["PRIMARY"][$column->getIndex()][] = $column->getName();
+				$this->combinedIndexes["PRIMARY"][$column->getIndex()][$column->getName()] = $column->getName();
 			}
 			elseif ($column->getIndex() == self::ROLE_INDEX || $column->getIndex() == self::ROLE_UNIQUE)
 			{
-				$this->combinedIndexes[$column->getName()][$column->getIndex()][] = $column->getName();
+				$this->combinedIndexes[$column->getName()][$column->getIndex()][$column->getName()] = $column->getName();
 			}
 		}
 
@@ -103,22 +103,58 @@ class Schema implements ISchema
 
 	public function addColumn(Type $column)
 	{
-		if (in_array($column->getName(), $this->exclude))
+		if (isset($this->exclude[$column->getName()]))
 		{
 			//trigger_error($this->name() . "." . $column->getName() . ": this column is not acceptable", E_USER_WARNING);
 			throw new Exception();
 		}
 		if ($column->getIndex() == self::ROLE_PRIMARY)
 		{
-			$this->combinedIndexes["PRIMARY"][$column->getIndex()][] = $column->getName();
+			$this->combinedIndexes["PRIMARY"][$column->getIndex()][$column->getName()] = $column->getName();
 		}
 		elseif ($column->getIndex() == self::ROLE_INDEX || $column->getIndex() == self::ROLE_UNIQUE)
 		{
-			$this->combinedIndexes[$column->getName()][$column->getIndex()][] = $column->getName();
+			$this->combinedIndexes[$column->getName()][$column->getIndex()][$column->getName()] = $column->getName();
 		}
-		$this->exclude[] = $column->getName();
-		$this->columns[] = $column;
+		$this->exclude[$column->getName()] = $column->getName();
+		$this->columns[$column->getName()] = $column;
 		return $this;
+	}
+
+	public function getColumn($name = null)
+	{
+		return is_null($name) ? (isset($this->columns[$name]) ? $this->columns[$name] : null) : end($this->columns);
+	}
+	
+	public function column($name = null)
+	{
+		return $this->getColumn();
+	}
+	
+	public function removeColumn($name)
+	{
+		$column = $this->getColumn($name);
+		if($column)
+		{
+			unset($this->exclude[$column->getName()]);
+			if(isset($this->combinedIndexes[$column->getName()]))
+			{
+				unset($this->combinedIndexes[$column->getName()]);
+			}
+			$index_groups = array_keys($this->combinedIndexes);
+			foreach ($index_groups as $group)
+			{
+				$index_roles = array_keys($this->combinedIndexes[$group]);
+				foreach ($index_roles as $role)
+				{
+					if(isset($this->combinedIndexes[$group][$role][$name]))
+					{
+						unset($this->combinedIndexes[$group][$role][$name]);
+					}
+				}
+			}
+			unset($this->columns[$name]);
+		}
 	}
 
 	/**
@@ -297,13 +333,13 @@ class Schema implements ISchema
 			{
 				trigger_error("Maybe error");
 			}
-			$this->combinedIndexes["PRIMARY"][$role][] = $column;
+			$this->combinedIndexes["PRIMARY"][$role][$column] = $column;
 		}
 		elseif ($role == self::ROLE_INDEX || $role == self::ROLE_UNIQUE)
 		{
 			if (!isset($this->combinedIndexes[$group]) || (isset($this->combinedIndexes[$group][$role])))
 			{
-				$this->combinedIndexes[$group][$role][] = $column;
+				$this->combinedIndexes[$group][$role][$column] = $column;
 			}
 			else
 			{
