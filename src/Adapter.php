@@ -172,13 +172,27 @@ class Adapter
 	public function exec($query)
 	{
 		$this->addToLog($query);
-		return $this->pdo->exec($query);
+		try
+		{
+			return $this->pdo->exec($query);
+		}
+		catch (PDOException $exc)
+		{
+			throw new Exception($exc->getMessage() . " ( " . $query . " )", null, $exc);
+		}
 	}
 
 	public function statment($query)
 	{
 		$this->addToLog($query);
-		return $this->pdo->prepare($query);
+		try
+		{
+			return $this->pdo->prepare($query);
+		}
+		catch (PDOException $exc)
+		{
+			throw new Exception($exc->getMessage() . " ( " . $query . " )", null, $exc);
+		}
 	}
 
 	/**

@@ -104,9 +104,15 @@ abstract class AbstractQuery
 				$this->params[$key] = $value;
 			}
 		}
-
-		$this->statment = $this->context["adapter"]->statment($this->getRawQuery());		
-		return $this->statment->execute($this->params);
+		try
+		{
+			$this->statment = $this->context["adapter"]->statment($this->getRawQuery());
+			return $this->statment->execute($this->params);
+		}
+		catch (\PDOException $exc)
+		{
+			throw new \PDOException($exc->getMessage() . " ( " . $this->getRawQuery() . " )", null, $exc);
+		}
 	}
 
 	public function getStatment()
