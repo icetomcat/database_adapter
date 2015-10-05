@@ -125,19 +125,19 @@ class Schema implements ISchema
 	{
 		return is_null($name) ? (isset($this->columns[$name]) ? $this->columns[$name] : null) : end($this->columns);
 	}
-	
+
 	public function column($name = null)
 	{
 		return $this->getColumn();
 	}
-	
+
 	public function removeColumn($name)
 	{
 		$column = $this->getColumn($name);
-		if($column)
+		if ($column)
 		{
 			unset($this->exclude[$column->getName()]);
-			if(isset($this->combinedIndexes[$column->getName()]))
+			if (isset($this->combinedIndexes[$column->getName()]))
 			{
 				unset($this->combinedIndexes[$column->getName()]);
 			}
@@ -147,7 +147,7 @@ class Schema implements ISchema
 				$index_roles = array_keys($this->combinedIndexes[$group]);
 				foreach ($index_roles as $role)
 				{
-					if(isset($this->combinedIndexes[$group][$role][$name]))
+					if (isset($this->combinedIndexes[$group][$role][$name]))
 					{
 						unset($this->combinedIndexes[$group][$role][$name]);
 					}
@@ -279,17 +279,17 @@ class Schema implements ISchema
 	{
 		return $this->addColumn(Type::boolean($name, $default, $index));
 	}
-	
+
 	public function unique()
 	{
 		return $this->addUniqueIndex();
 	}
-	
+
 	public function index()
 	{
 		return $this->addIndex();
 	}
-	
+
 	public function primary()
 	{
 		return $this->addPrimaryIndex();
@@ -297,53 +297,64 @@ class Schema implements ISchema
 
 	public function addUniqueIndex($column = null, $group = null)
 	{
-		$this->addSomeIndex(self::ROLE_UNIQUE, $column, $group);
-		return $this;
+		return $this->addSomeIndex(self::ROLE_UNIQUE, $column, $group);
 	}
 
 	public function addIndex($column = null, $group = null)
 	{
-		$this->addSomeIndex(self::ROLE_INDEX, $column, $group);
-		return $this;
+		return $this->addSomeIndex(self::ROLE_INDEX, $column, $group);
 	}
 
 	public function addPrimaryIndex($column = null, $group = null)
 	{
-		$this->addSomeIndex(self::ROLE_PRIMARY, $column, $group);
-		return $this;
+		return $this->addSomeIndex(self::ROLE_PRIMARY, $column, $group);
 	}
 
 	protected function addSomeIndex($role, $column = null, $group = null)
 	{
-		if (!$column)
+		if (is_array($column))
 		{
-			if (!$this->columns)
+			if (!$group)
 			{
-				throw new Exception();
+				$group = reset($column);
 			}
-			$column = end($this->columns)->getName();
-		}
-		if (!$group)
-		{
-			$group = $column;
-		}
-		if ($role == self::ROLE_PRIMARY)
-		{
-			if ($group)
+			foreach ($column as $col)
 			{
-				trigger_error("Maybe error");
+				$this->addSomeIndex($role, $col, $group);
 			}
-			$this->combinedIndexes["PRIMARY"][$role][$column] = $column;
 		}
-		elseif ($role == self::ROLE_INDEX || $role == self::ROLE_UNIQUE)
+		else
 		{
-			if (!isset($this->combinedIndexes[$group]) || (isset($this->combinedIndexes[$group][$role])))
+			if (!$column)
 			{
-				$this->combinedIndexes[$group][$role][$column] = $column;
+				if (!$this->columns)
+				{
+					throw new Exception();
+				}
+				$column = end($this->columns)->getName();
 			}
-			else
+			if (!$group)
 			{
-				throw new \Exception();
+				$group = $column;
+			}
+			if ($role == self::ROLE_PRIMARY)
+			{
+				if ($group)
+				{
+					trigger_error("Maybe error");
+				}
+				$this->combinedIndexes["PRIMARY"][$role][$column] = $column;
+			}
+			elseif ($role == self::ROLE_INDEX || $role == self::ROLE_UNIQUE)
+			{
+				if (!isset($this->combinedIndexes[$group]) || (isset($this->combinedIndexes[$group][$role])))
+				{
+					$this->combinedIndexes[$group][$role][$column] = $column;
+				}
+				else
+				{
+					throw new \Exception();
+				}
 			}
 		}
 		return $this;
