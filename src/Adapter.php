@@ -178,7 +178,7 @@ class Adapter
 		}
 		catch (PDOException $exc)
 		{
-			throw new Exception($exc->getMessage() . " ( " . $query . " )", null, $exc);
+			throw new Exception($exc->getMessage() . " ( " . $query . " )");
 		}
 	}
 
@@ -377,10 +377,10 @@ class Adapter
 								$sql .= ",PRIMARY KEY(" . "`" . implode("`,`", $group) . "`" . ")";
 								break;
 							case 'UNIQUE':
-								$sql .= ",UNIQUE $key(" . "`" . implode("`,`", $group) . "`" . ")";
+								$sql .= ",UNIQUE `$key`(" . "`" . implode("`,`", $group) . "`" . ")";
 								break;
 							case 'INDEX':
-								$sql .= ",INDEX $key(" . "`" . implode("`,`", $group) . "`" . ")";
+								$sql .= ",INDEX `$key`(" . "`" . implode("`,`", $group) . "`" . ")";
 								break;
 						}
 					}
