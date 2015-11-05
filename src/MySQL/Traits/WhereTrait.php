@@ -190,6 +190,10 @@ trait WhereTrait
 				{
 					return "{$column} {$operator} {$value}";
 				}
+				elseif (is_string($value))
+				{
+					return "{$column} {$operator} '{$value}'";
+				}
 				else
 				{
 					if (strpos($key, "#") === 0)
