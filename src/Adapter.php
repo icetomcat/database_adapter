@@ -62,7 +62,7 @@ class Adapter
 					$type = 'mysql';
 
 				case 'mysql':
-					if ($this->config["socket"])
+					if (isset($this->config["socket"]) && $this->config["socket"])
 					{
 						$dsn = $type . ':unix_socket=' . $this->config["socket"] . ';dbname=' . $this->config["dbname"];
 					}
@@ -197,7 +197,7 @@ class Adapter
 
 	/**
 	 * @param array $query
-	 * @return \Services\Database\Select
+	 * @return Base\AbstractQuery
 	 */
 	public function select($query)
 	{
@@ -208,7 +208,7 @@ class Adapter
 	/**
 	 * 
 	 * @param array $query
-	 * @return \Services\Database\Insert
+	 * @return Base\AbstractQuery
 	 */
 	public function insert($query)
 	{
@@ -219,7 +219,7 @@ class Adapter
 	/**
 	 * 
 	 * @param array $query
-	 * @return \Services\Database\Update
+	 * @return Base\AbstractQuery
 	 */
 	public function update($query)
 	{
@@ -230,7 +230,7 @@ class Adapter
 	/**
 	 * 
 	 * @param array $query
-	 * @return \Services\Database\Delete
+	 * @return Base\AbstractQuery
 	 */
 	public function delete($query)
 	{

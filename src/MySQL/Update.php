@@ -65,4 +65,10 @@ class Update extends AbstractQuery
 		return $this->raw_query;
 	}
 
+	public function execute(array $params = array())
+	{
+		parent::execute($params);
+		return $this->statment->rowCount();
+	}
+
 }

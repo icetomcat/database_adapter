@@ -149,5 +149,10 @@ class Type implements IType
 	{
 		return new Type($name, "TINYINT", 1, $default ? "1" : "0", "", $index, false, true);
 	}
+	
+	static public function enum($name, array $enum = [], $default = false, $index = "")
+	{
+		return new Type($name, "ENUM", "'" . implode("','", $enum) . "'", $default ? "1" : "0", "", $index, false, true);
+	}
 
 }
