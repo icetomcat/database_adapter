@@ -257,7 +257,7 @@ class Schema implements ISchema
 	
 	public function mediumtext($name, $collation = "utf8_general_ci")
 	{
-		return $this->addColumn(Type::mdiumtext($name, $collation));
+		return $this->addColumn(Type::mediumtext($name, $collation));
 	}
 	
 	public function longtext($name, $collation = "utf8_general_ci")
