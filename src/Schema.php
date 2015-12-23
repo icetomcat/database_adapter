@@ -245,9 +245,24 @@ class Schema implements ISchema
 		return $this->addColumn(Type::char($name, $length, $default, $index, $collation));
 	}
 
+	public function tinytext($name, $collation = "utf8_general_ci")
+	{
+		return $this->addColumn(Type::tinytext($name, $collation));
+	}
+
 	public function text($name, $collation = "utf8_general_ci")
 	{
 		return $this->addColumn(Type::text($name, $collation));
+	}
+	
+	public function mediumtext($name, $collation = "utf8_general_ci")
+	{
+		return $this->addColumn(Type::mdiumtext($name, $collation));
+	}
+	
+	public function longtext($name, $collation = "utf8_general_ci")
+	{
+		return $this->addColumn(Type::longtext($name, $collation));
 	}
 
 	public function date($name, $default = "0000-00-00", $index = "")

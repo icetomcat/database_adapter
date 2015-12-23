@@ -115,9 +115,24 @@ class Type implements IType
 		return new Type($name, "VARCHAR", $length, $default, $collation, $index, false, $default ? true : false);
 	}
 
+	static public function tinytext($name, $collation = "utf8_general_ci")
+	{
+		return new Type($name, "TINYTEXT", "", "", $collation, "", false, false);
+	}
+
 	static public function text($name, $collation = "utf8_general_ci")
 	{
 		return new Type($name, "TEXT", "", "", $collation, "", false, false);
+	}
+	
+	static public function mediumtext($name, $collation = "utf8_general_ci")
+	{
+		return new Type($name, "MEDIUMTEXT", "", "", $collation, "", false, false);
+	}
+	
+	static public function longtext($name, $collation = "utf8_general_ci")
+	{
+		return new Type($name, "LONGTEXT", "", "", $collation, "", false, false);
 	}
 
 	static public function date($name, $default = "0000-00-00", $index = "")
