@@ -123,12 +123,12 @@ class Schema implements ISchema
 
 	public function getColumn($name = null)
 	{
-		return is_null($name) ? (isset($this->columns[$name]) ? $this->columns[$name] : null) : end($this->columns);
+		return is_string($name) ? (isset($this->columns[$name]) ? $this->columns[$name] : null) : end($this->columns);
 	}
 
 	public function column($name = null)
 	{
-		return $this->getColumn();
+		return $this->getColumn($name);
 	}
 
 	public function removeColumn($name)
