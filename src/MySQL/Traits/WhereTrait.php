@@ -257,17 +257,20 @@ trait WhereTrait
 		$stack = [];
 		foreach ($where as $key => $value)
 		{
-			if ($key == "AND" || $key == "OR")
+			if ($value)
 			{
-				array_push($stack, "(" . $this->makeWhereBlock($value, $key) . ")");
-			}
-			elseif (is_string($key))
-			{
-				array_push($stack, $this->makeWhereCondition($key, $value));
-			}
-			else
-			{
-				throw new Exception();
+				if ($key == "AND" || $key == "OR")
+				{
+					array_push($stack, "(" . $this->makeWhereBlock($value, $key) . ")");
+				}
+				elseif (is_string($key))
+				{
+					array_push($stack, $this->makeWhereCondition($key, $value));
+				}
+				else
+				{
+					throw new Exception();
+				}
 			}
 		}
 
