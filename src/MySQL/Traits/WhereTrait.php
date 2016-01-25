@@ -162,7 +162,6 @@ trait WhereTrait
 						$column .= " NOT";
 					}
 
-
 					if (strpos($key, "#") === 0)
 					{
 						if ($fn = $this->makeColumnFn($value, []))
@@ -257,20 +256,23 @@ trait WhereTrait
 		$stack = [];
 		foreach ($where as $key => $value)
 		{
-			if ($value)
+			if ($key == "AND" || $key == "OR")
 			{
-				if ($key == "AND" || $key == "OR")
+				if ($block = $this->makeWhereBlock($value, $key))
 				{
-					array_push($stack, "(" . $this->makeWhereBlock($value, $key) . ")");
+					array_push($stack, "({$block})");
 				}
-				elseif (is_string($key))
+			}
+			elseif (is_string($key))
+			{
+				if ($block = $this->makeWhereCondition($key, $value))
 				{
-					array_push($stack, $this->makeWhereCondition($key, $value));
+					array_push($stack, $block);
 				}
-				else
-				{
-					throw new Exception();
-				}
+			}
+			else
+			{
+				throw new Exception();
 			}
 		}
 
