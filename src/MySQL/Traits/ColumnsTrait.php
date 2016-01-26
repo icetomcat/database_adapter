@@ -47,7 +47,6 @@ trait ColumnsTrait
 				break;
 			default :
 				return null;
-				break;
 		}
 		foreach ($count as $i)
 		{
