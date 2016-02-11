@@ -274,7 +274,7 @@ class Adapter
 	public function count($query)
 	{
 		$query["columns"] = ["COUNT" => ["*"]];
-		return 0 + ($this->query($this->select($query))->fetchColumn());
+		return 0 + ($this->query($this->select($query)->getRawQuery())->fetchColumn());
 	}
 
 	public function error()
