@@ -274,7 +274,10 @@ class Adapter
 	public function count($query)
 	{
 		$query["columns"] = ["COUNT" => ["*"]];
-		return 0 + ($this->query($this->select($query)->getRawQuery())->fetchColumn());
+		if (isset($query["order"]))
+			unset($query["order"]);
+		
+		return 0 + $this->select($query)->fetchColumn();
 	}
 
 	public function error()
