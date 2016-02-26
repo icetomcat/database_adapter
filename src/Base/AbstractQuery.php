@@ -58,7 +58,7 @@ abstract class AbstractQuery
 	 * 
 	 * @return array
 	 */
-	protected function getParams()
+	public function getParams()
 	{
 		return $this->params;
 	}
@@ -67,7 +67,7 @@ abstract class AbstractQuery
 	{
 		if (!$key)
 		{
-			$key = "__p" . ($this->key_iterator++);
+			$key = "__p" . count($this->params);
 		}
 		$this->params[":$key"] = $param;
 		return ":$key";
