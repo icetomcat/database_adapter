@@ -55,63 +55,68 @@ trait WhereTrait
 
 					case "array":
 
-						if (isset($value["table"]))
+						if (count($value) > 0)
 						{
-							if ($operator == "=")
-							{
-								return $column . " IN ( " . (new Select($value, $this->context, $this->params))->getRawQuery() . " )";
-							}
-							else
-							{
-								return $column . " NOT IN ( " . (new Select($value, $this->context, $this->params))->getRawQuery() . " )";
-							}
-						}
-						elseif ((strpos($key, "#") === 0))
-						{
-							$stack = [];
-							foreach ($value as $k => $v)
-							{
-								if (is_string($k) && ($fn = $this->makeColumnFn($k, $v)))
-								{
-									array_push($stack, $fn);
-								}
-								elseif (is_integer($k) && ($fn = $this->makeColumnFn($v, [])))
-								{
-									array_push($stack, $fn);
-								}
-								else
-								{
-									throw new Exception();
-								}
-							}
-							if (count($stack) == 1)
-							{
-								return $column . " $operator {$stack[0]}";
-							}
-							else
+							if (isset($value["table"]))
 							{
 								if ($operator == "=")
 								{
-									return $column . " IN (" . implode(", ", $stack) . ")";
+									return $column . " IN ( " . (new Select($value, $this->context, $this->params))->getRawQuery() . " )";
 								}
 								else
 								{
-									return $column . " NOT IN (" . implode(", ", $stack) . ")";
+									return $column . " NOT IN ( " . (new Select($value, $this->context, $this->params))->getRawQuery() . " )";
 								}
 							}
-						}
+							elseif ((strpos($key, "#") === 0))
+							{
+								$stack = [];
+								foreach ($value as $k => $v)
+								{
+									if (is_string($k) && ($fn = $this->makeColumnFn($k, $v)))
+									{
+										array_push($stack, $fn);
+									}
+									elseif (is_integer($k) && ($fn = $this->makeColumnFn($v, [])))
+									{
+										array_push($stack, $fn);
+									}
+									else
+									{
+										throw new Exception();
+									}
+								}
+								if (count($stack) == 1)
+								{
+									return $column . " $operator {$stack[0]}";
+								}
+								else
+								{
+									if ($operator == "=")
+									{
+										return $column . " IN (" . implode(", ", $stack) . ")";
+									}
+									else
+									{
+										return $column . " NOT IN (" . implode(", ", $stack) . ")";
+									}
+								}
+							}
 
-						if ($operator == "=")
-						{
-							return $column . " IN ({$this->arrayQuote($value)})";
+							if ($operator == "=")
+							{
+								return $column . " IN ({$this->arrayQuote($value)})";
+							}
+							else
+							{
+								return $column . " NOT IN ({$this->arrayQuote($value)})";
+							}
 						}
 						else
 						{
-							return $column . " NOT IN ({$this->arrayQuote($value)})";
+							return $column . " IN (NULL)";
 						}
-
 						break;
-
 					case "integer":
 					case "double":
 						return "{$column} $operator {$value}";
