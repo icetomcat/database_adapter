@@ -228,11 +228,11 @@ trait WhereTrait
 									}
 									else
 									{
-										throw new Exception();
+										throw new Exception($k);
 									}
 								}
 							}
-							return $column . " $operator (" . implode(", ", $stack) . ")";
+							return $column . " $operator " . implode(", ", $stack);
 						}
 						else
 						{

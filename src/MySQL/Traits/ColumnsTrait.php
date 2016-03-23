@@ -9,6 +9,10 @@ trait ColumnsTrait
 
 	protected function makeColumnFn($key, $value)
 	{
+		if(is_scalar($value))
+		{
+			$value = [$value];
+		}
 		$infix = false;
 		$count = [null];
 
@@ -41,6 +45,12 @@ trait ColumnsTrait
 				break;
 			case "PI":
 				$count = [0];
+				break;
+			case "NOW":
+				$count = [0];
+				break;
+			case "UNIX_TIMESTAMP":
+				$count = [1, 0];
 				break;
 			case "MOD":
 				$count = [2];
