@@ -8,6 +8,8 @@ interface ISchema
 	const ROLE_PRIMARY = "PRIMARY";
 	const ROLE_UNIQUE = "UNIQUE";
 	const ROLE_INDEX = "INDEX";
+	
+	const DEFAULT_CURRENT_TIMESTAMP = "#CURRENT_TIMESTAMP";
 
 	/**
 	 * 

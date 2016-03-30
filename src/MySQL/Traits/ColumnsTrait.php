@@ -52,6 +52,9 @@ trait ColumnsTrait
 			case "UNIX_TIMESTAMP":
 				$count = [1, 0];
 				break;
+			case "FROM_UNIXTIME":
+				$count = [2, 1];
+				break;
 			case "MOD":
 				$count = [2];
 				break;
