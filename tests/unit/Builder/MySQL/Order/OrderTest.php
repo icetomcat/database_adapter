@@ -39,13 +39,13 @@ class OrderTest extends PHPUnit_Framework_TestCase
 	public function testOrderByFieldWithMixedData()
 	{
 		$order = new Order(["order" => ["FIELD" => ["category_id", 1, "2", 3.5]]]);
-		$this->assertEquals($order->getRawQuery(), "FIELD(`category_id`, 1,?,3.5)");
+		$this->assertEquals($order->getRawQuery(), "FIELD(`category_id`, 1,:__p0,3.5)");
 	}
 
 	public function testOrderByFieldInSet()
 	{
 		$order = new Order(["order" => ["FIELD_IN_SET" => ["category_id", "1, 2, 3, 4, 5"]]]);
-		$this->assertEquals($order->getRawQuery(), "FIELD_IN_SET(`category_id`, ?)");
+		$this->assertEquals($order->getRawQuery(), "FIELD_IN_SET(`category_id`, :__p0)");
 	}
 
 }
