@@ -7,7 +7,8 @@ use Database\Base\AbstractQuery;
 class Delete extends AbstractQuery
 {
 
-	use Traits\ColumnsTrait,
+	use 
+	 Traits\RightColumnsTrait,
 	 Traits\TableTrait,
 	 Traits\WhereTrait;
 
@@ -24,4 +25,5 @@ class Delete extends AbstractQuery
 		}
 		return $this->raw_query;
 	}
+
 }

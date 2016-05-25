@@ -10,6 +10,7 @@ class Select extends AbstractQuery
 {
 
 	use Traits\ColumnsTrait,
+	 Traits\RightColumnsTrait,
 	 Traits\TableTrait,
 	 Traits\JoinTrait,
 	 Traits\WhereTrait,
@@ -74,7 +75,7 @@ class Select extends AbstractQuery
 	{
 		return $this->getStatment()->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
+
 	public function fetchColumn()
 	{
 		return $this->getStatment()->fetchColumn();

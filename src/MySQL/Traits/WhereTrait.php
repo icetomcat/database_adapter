@@ -27,7 +27,7 @@ trait WhereTrait
 			}
 			else
 			{
-				$column = $this->makeColumn(0, $match[2]);
+				$column = $this->makeRightColumn(0, $match[2]);
 			}
 			if (!isset($match[4]))
 			{
@@ -73,11 +73,11 @@ trait WhereTrait
 								$stack = [];
 								foreach ($value as $k => $v)
 								{
-									if (is_string($k) && ($fn = $this->makeColumnFn($k, $v)))
+									if (is_string($k) && ($fn = $this->makeRightColumnFn($k, $v)))
 									{
 										array_push($stack, $fn);
 									}
-									elseif (is_integer($k) && ($fn = $this->makeColumnFn($v, [])))
+									elseif (is_integer($k) && ($fn = $this->makeRightColumnFn($v, [])))
 									{
 										array_push($stack, $fn);
 									}
@@ -127,9 +127,17 @@ trait WhereTrait
 						break;
 
 					case "string":
-						if ((strpos($key, "#") === 0 && ($fn = $this->makeColumnFn($value, []))))
+						if ((strpos($key, "#") === 0))
 						{
-							return "{$column} $operator {$fn}";
+							$fn = $this->makeRightColumnFn($value, []);
+							if ($fn)
+							{
+								return "{$column} $operator {$fn}";
+							}
+							else
+							{
+								return "{$column} $operator {$this->makeRightColumn(0, $value)}";
+							}
 						}
 						else
 						{
@@ -169,13 +177,13 @@ trait WhereTrait
 
 					if (strpos($key, "#") === 0)
 					{
-						if ($fn = $this->makeColumnFn($value, []))
+						if ($fn = $this->makeRightColumnFn($value, []))
 						{
 							return "{$column} LIKE $fn";
 						}
 						else
 						{
-							return "{$column} LIKE " . $this->makeColumn(0, $value);
+							return "{$column} LIKE " . $this->makeRightColumn(0, $value);
 						}
 					}
 					else
@@ -202,7 +210,7 @@ trait WhereTrait
 				{
 					if (strpos($key, "#") === 0)
 					{
-						if (is_string($value) && $fn = $this->makeColumnFn($value, []))
+						if (is_string($value) && $fn = $this->makeRightColumnFn($value, []))
 						{
 							return "{$column} $operator $fn";
 						}
@@ -218,11 +226,11 @@ trait WhereTrait
 
 								foreach ($value as $k => $v)
 								{
-									if (is_string($k) && ($fn = $this->makeColumnFn($k, $v)))
+									if (is_string($k) && ($fn = $this->makeRightColumnFn($k, $v)))
 									{
 										array_push($stack, $fn);
 									}
-									elseif (is_integer($k) && ($fn = $this->makeColumnFn($v, [])))
+									elseif (is_integer($k) && ($fn = $this->makeRightColumnFn($v, [])))
 									{
 										array_push($stack, $fn);
 									}
@@ -236,7 +244,7 @@ trait WhereTrait
 						}
 						else
 						{
-							return "{$column} $operator " . $this->makeColumn(0, $value);
+							return "{$column} $operator " . $this->makeRightColumn(0, $value);
 						}
 					}
 					else

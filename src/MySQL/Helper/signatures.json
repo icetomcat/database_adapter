@@ -1,0 +1,77 @@
+{
+	"PI": {
+		"infix": false,
+		"number_of_parameters": 0,
+		"number_of_required_parameters": 0
+	},
+	"+": {
+		"infix": true,
+		"number_of_parameters": "INF",
+		"number_of_required_parameters": 2
+	},
+	"-": {
+		"infix": true,
+		"number_of_parameters": "INF",
+		"number_of_required_parameters": 2
+	},
+	"*": {
+		"infix": true,
+		"number_of_parameters": "INF",
+		"number_of_required_parameters": 2
+	},
+	"/": {
+		"infix": true,
+		"number_of_parameters": "INF",
+		"number_of_required_parameters": 2
+	},
+	"EXISTS": {
+		"infix": false,
+		"number_of_parameters": 1,
+		"number_of_required_parameters": 1
+	},
+	"COUNT": {
+		"infix": false,
+		"number_of_parameters": 1,
+		"number_of_required_parameters": 1
+	},
+	"PASSWORD": {
+		"infix": false,
+		"number_of_parameters": 1,
+		"number_of_required_parameters": 1
+	},
+	"COMPRESS": {
+		"infix": false,
+		"number_of_parameters": 1,
+		"number_of_required_parameters": 1
+	},
+	"UNCOMPRESS": {
+		"infix": false,
+		"number_of_parameters": 1,
+		"number_of_required_parameters": 1
+	},
+	"RAND": {
+		"infix": false,
+		"number_of_parameters": 1,
+		"number_of_required_parameters": 0
+	},
+	"NOW": {
+		"infix": false,
+		"number_of_parameters": 0,
+		"number_of_required_parameters": 0
+	},
+	"UNIX_TIMESTAMP": {
+		"infix": false,
+		"number_of_parameters": 1,
+		"number_of_required_parameters": 0
+	},
+	"FROM_UNIXTIME": {
+		"infix": false,
+		"number_of_parameters": 2,
+		"number_of_required_parameters": 1
+	},
+	"MOD": {
+		"infix": false,
+		"number_of_parameters": 2,
+		"number_of_required_parameters": 2
+	}
+}

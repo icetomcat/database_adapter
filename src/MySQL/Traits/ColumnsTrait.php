@@ -1,6 +1,8 @@
 <?php
+
 namespace Database\MySQL\Traits;
 
+use Database\MySQL\Helper\ReflectionMySQLFunction;
 use Database\MySQL\Select;
 use Exception;
 
@@ -9,12 +11,10 @@ trait ColumnsTrait
 
 	protected function makeColumnFn($key, $value)
 	{
-		if(is_scalar($value))
+		if (is_scalar($value))
 		{
 			$value = [$value];
 		}
-		$infix = false;
-		$count = [null];
 
 		preg_match('/([a-zA-Z0-9_\-\.\+\-\*\/]*)\s*\(([a-zA-Z0-9_\-]*)\)/i', $key, $match);
 		if (isset($match[1], $match[2]))
@@ -27,59 +27,31 @@ trait ColumnsTrait
 			$fn = $key;
 			$alias = null;
 		}
-		switch ($fn)
+
+		$reflection = new ReflectionMySQLFunction($fn);
+		
+		if (!$reflection->isDefined())
 		{
-			case "EXISTS":
-			case "COUNT":
-				$count = [1];
-				break;
-			case "+":
-			case "-":
-			case "*":
-			case "/":
-				$count = [2];
-				$infix = true;
-				break;
-			case "RAND":
-				$count = [1, 0];
-				break;
-			case "PI":
-				$count = [0];
-				break;
-			case "NOW":
-				$count = [0];
-				break;
-			case "UNIX_TIMESTAMP":
-				$count = [1, 0];
-				break;
-			case "FROM_UNIXTIME":
-				$count = [2, 1];
-				break;
-			case "MOD":
-				$count = [2];
-				break;
-			default :
-				return null;
+			return null;
 		}
-		foreach ($count as $i)
+		
+		if (is_array($value) && (count($value) >= $reflection->getNumberOfRequiredParameters() && count($value) <= $reflection->getNumberOfParameters()))
 		{
-			if ((is_null($i)) || (is_array($value) && (!is_null($i) && (count($value) == $i))))
+			$stack = [];
+			foreach ($value as $k => $v)
 			{
-				$stack = [];
-				foreach ($value as $k => $v)
-				{
-					array_push($stack, $this->makeColumn($k, $v));
-				}
-				if ($infix)
-				{
-					return "(" . implode(" {$fn} ", $stack) . ")" . ($alias ? " AS {$this->columnQuote($alias)}" : "");
-				}
-				else
-				{
-					return "{$fn}(" . implode(", ", $stack) . ")" . ($alias ? " AS {$this->columnQuote($alias)}" : "");
-				}
+				array_push($stack, $this->makeColumn($k, $v));
+			}
+			if ($reflection->isInfix())
+			{
+				return "(" . implode(" {$fn} ", $stack) . ")" . ($alias ? " AS {$this->columnQuote($alias)}" : "");
+			}
+			else
+			{
+				return "{$fn}(" . implode(", ", $stack) . ")" . ($alias ? " AS {$this->columnQuote($alias)}" : "");
 			}
 		}
+
 
 		return null;
 	}
@@ -115,17 +87,17 @@ trait ColumnsTrait
 		}
 		elseif (is_string($value) && is_integer($key))
 		{
-			preg_match('/([a-zA-Z0-9_\-\.]*)\s*\(([a-zA-Z0-9_\-]*)\)/i', $value, $match);
+			preg_match('/(#?)([a-zA-Z0-9_\-\.]*)\s*\(([a-zA-Z0-9_\-]*)\)/i', $value, $match);
 
-			if (isset($match[1], $match[2]))
+			if (isset($match[2], $match[3]))
 			{
 				if (in_array($array[0], $this->context["table_aliases"]))
 				{
-					return $this->columnQuote($match[1]) . ' AS ' . $this->columnQuote($match[2]);
+					return ($value[0] == "#" ? $this->addParam($match[2]) : $this->columnQuote($match[2])) . ' AS ' . $this->columnQuote($match[3]);
 				}
 				else
 				{
-					return $this->columnQuote($this->context["prefix"] . $match[1]) . ' AS ' . $this->columnQuote($match[2]);
+					return ($value[0] == "#" ? $this->addParam($match[2]) : $this->columnQuote($this->context["prefix"] . $match[2])) . ' AS ' . $this->columnQuote($match[3]);
 				}
 			}
 			else
@@ -137,11 +109,11 @@ trait ColumnsTrait
 				}
 				if (in_array($array[0], $this->context["table_aliases"]))
 				{
-					return (isset($array[1]) ? $this->columnQuote($array[0]) . "." . $this->columnQuote($array[1]) : $this->columnQuote($value));
+					return (isset($array[1]) ? $this->columnQuote($array[0]) . "." . $this->columnQuote($array[1]) : ($value[0] == "#" ? $this->addParam($value) : $this->columnQuote($value)) );
 				}
 				else
 				{
-					return (isset($array[1]) ? $this->columnQuote($this->context["prefix"] . $array[0]) . "." . $this->columnQuote($array[1]) : $this->columnQuote($value));
+					return (isset($array[1]) ? $this->columnQuote($this->context["prefix"] . $array[0]) . "." . $this->columnQuote($array[1]) : ($value[0] == "#" ? $this->addParam($value) : $this->columnQuote($value)) );
 				}
 			}
 		}
