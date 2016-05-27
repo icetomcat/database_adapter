@@ -8,7 +8,6 @@ interface ISchema
 	const ROLE_PRIMARY = "PRIMARY";
 	const ROLE_UNIQUE = "UNIQUE";
 	const ROLE_INDEX = "INDEX";
-	
 	const DEFAULT_CURRENT_TIMESTAMP = "#CURRENT_TIMESTAMP";
 
 	/**
@@ -75,7 +74,31 @@ interface ISchema
 	 * @param string $collation
 	 * @return ISchema
 	 */
+	public function tinytext($name, $collation = "utf8_general_ci");
+
+	/**
+	 * 
+	 * @param string $name
+	 * @param string $collation
+	 * @return ISchema
+	 */
 	public function text($name, $collation = "utf8_general_ci");
+
+	/**
+	 * 
+	 * @param string $name
+	 * @param string $collation
+	 * @return ISchema
+	 */
+	public function mediumtext($name, $collation = "utf8_general_ci");
+
+	/**
+	 * 
+	 * @param string $name
+	 * @param string $collation
+	 * @return ISchema
+	 */
+	public function longtext($name, $collation = "utf8_general_ci");
 
 	/**
 	 * 
@@ -124,11 +147,52 @@ interface ISchema
 	/**
 	 * 
 	 * @param string $name
+	 * @param string $collation
+	 * @return ISchema
+	 */
+	public function tinyblob($name, $collation = "utf8_general_ci");
+
+	/**
+	 * 
+	 * @param string $name
+	 * @param string $collation
+	 * @return ISchema
+	 */
+	public function blob($name, $collation = "utf8_general_ci");
+
+	/**
+	 * 
+	 * @param string $name
+	 * @param string $collation
+	 * @return ISchema
+	 */
+	public function mediumblob($name, $collation = "utf8_general_ci");
+
+	/**
+	 * 
+	 * @param string $name
+	 * @param string $collation
+	 * @return ISchema
+	 */
+	public function longblob($name, $collation = "utf8_general_ci");
+
+	/**
+	 * 
+	 * @param string $name
 	 * @param string $default
 	 * @param string $index
 	 * @return ISchema
 	 */
 	public function boolean($name, $default = false, $index = '');
+
+	/**
+	 * 
+	 * @param string $name
+	 * @param array $enum
+	 * @param string $default
+	 * @param string $index
+	 */
+	public function enum($name, array $enum = [], $default = false, $index = "");
 
 	/**
 	 * 

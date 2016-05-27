@@ -289,10 +289,35 @@ class Schema implements ISchema
 	{
 		return $this->addColumn(Type::double($name, $default));
 	}
+	
+	public function tinyblob($name, $collation = "utf8_general_ci")
+	{
+		return $this->addColumn(Type::tinyblob($name, $collation));
+	}
+
+	public function blob($name, $collation = "utf8_general_ci")
+	{
+		return $this->addColumn(Type::blob($name, $collation));
+	}
+	
+	public function mediumblob($name, $collation = "utf8_general_ci")
+	{
+		return $this->addColumn(Type::mediumblob($name, $collation));
+	}
+	
+	public function longblob($name, $collation = "utf8_general_ci")
+	{
+		return $this->addColumn(Type::longblob($name, $collation));
+	}
 
 	public function boolean($name, $default = false, $index = "")
 	{
 		return $this->addColumn(Type::boolean($name, $default, $index));
+	}
+	
+	public function enum($name, array $enum = [], $default = false, $index = "")
+	{
+		return $this->addColumn(Type::enum($name, $enum, $default, $index));
 	}
 
 	public function unique()

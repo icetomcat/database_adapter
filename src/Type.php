@@ -164,6 +164,26 @@ class Type implements IType
 	{
 		return new Type($name, "TINYINT", 1, $default ? "1" : "0", "", $index, false, true);
 	}
+
+	static public function tinyblob($name, $collation = "utf8_general_ci")
+	{
+		return new Type($name, "TINYBLOB", "", "", $collation, "", false, false);
+	}
+
+	static public function blob($name, $collation = "utf8_general_ci")
+	{
+		return new Type($name, "BLOB", "", "", $collation, "", false, false);
+	}
+	
+	static public function mediumblob($name, $collation = "utf8_general_ci")
+	{
+		return new Type($name, "MEDIUMBLOB", "", "", $collation, "", false, false);
+	}
+	
+	static public function longblob($name, $collation = "utf8_general_ci")
+	{
+		return new Type($name, "LONGBLOB", "", "", $collation, "", false, false);
+	}
 	
 	static public function enum($name, array $enum = [], $default = false, $index = "")
 	{
