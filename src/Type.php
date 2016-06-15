@@ -185,9 +185,9 @@ class Type implements IType
 		return new Type($name, "LONGBLOB", "", "", $collation, "", false, false);
 	}
 	
-	static public function enum($name, array $enum = [], $default = false, $index = "")
+	static public function enum($name, array $enum = [], $default = null, $index = "")
 	{
-		return new Type($name, "ENUM", "'" . implode("','", $enum) . "'", $default ? "1" : "0", "", $index, false, true);
+		return new Type($name, "ENUM", "'" . implode("','", $enum) . "'", $default, "", $index, false, true);
 	}
 
 }

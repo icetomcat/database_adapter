@@ -263,10 +263,8 @@ class Adapter
 
 	public function has($query)
 	{
-		$select = $this->select($query);
-		$statment = $this->statment('SELECT EXISTS(' . $select->getRawQuery() . ')');
-		$statment->execute($select->getParams());
-		return $statment->fetchColumn() === '1';
+		$query["limit"] = 1;
+		return $this->count($query) > 0;
 	}
 
 	/**
