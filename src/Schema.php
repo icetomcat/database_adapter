@@ -56,7 +56,6 @@ class Schema implements ISchema
 	 * @param string $name
 	 * @param Type[] $columns
 	 * @param array $combined_indexes ["PRIMARY" => [[id, col1, col2, ...]], "UNIQUE" => [[col1,col2,col3],[col1,col4], ...], "INDEX" => [[col1,col2,col3],[col1,col4], ...]]
-	 * @param string[] $relations ["table_name1", "table_name2"]
 	 * @param string $engine MyISAM | InnoDB | Memory ...
 	 * @param string $collate utf8_general_ci ...
 	 */
@@ -315,7 +314,7 @@ class Schema implements ISchema
 		return $this->addColumn(Type::boolean($name, $default, $index));
 	}
 	
-	public function enum($name, array $enum = [], $default = false, $index = "")
+	public function enum($name, array $enum = [], $default = null, $index = "")
 	{
 		return $this->addColumn(Type::enum($name, $enum, $default, $index));
 	}
