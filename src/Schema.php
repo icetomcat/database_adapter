@@ -314,9 +314,9 @@ class Schema implements ISchema
 		return $this->addColumn(Type::boolean($name, $default, $index));
 	}
 	
-	public function enum($name, array $enum = [], $default = null, $index = "")
+	public function enum($name, array $enum = [], $default = null, $index = "", $collation = "utf8_general_ci")
 	{
-		return $this->addColumn(Type::enum($name, $enum, $default, $index));
+		return $this->addColumn(Type::enum($name, $enum, $default, $index, $collation));
 	}
 
 	public function unique()

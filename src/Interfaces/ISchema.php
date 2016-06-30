@@ -192,7 +192,7 @@ interface ISchema
 	 * @param string $default
 	 * @param string $index
 	 */
-	public function enum($name, array $enum = [], $default = null, $index = "");
+	public function enum($name, array $enum = [], $default = null, $index = "", $collation = "utf8_general_ci");
 
 	/**
 	 * 
