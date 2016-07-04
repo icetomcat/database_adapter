@@ -15,7 +15,7 @@ trait RightColumnsTrait
 		{
 			$value = [$value];
 		}
-		if (preg_match('/(#?)([a-zA-Z0-9_\-\.]*)\s*/i', $key, $match))
+		if (preg_match('/(#?)([a-zA-Z0-9_\-\.\+\*\/]*)\s*/i', $key, $match))
 		{
 			$fn = $match[2];
 			$reflection = new ReflectionMySQLFunction($fn);
