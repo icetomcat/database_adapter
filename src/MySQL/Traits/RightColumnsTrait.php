@@ -30,7 +30,7 @@ trait RightColumnsTrait
 				$stack = [];
 				foreach ($value as $k => $v)
 				{
-					if (($key[0] == "#") || is_array($v))
+					if (($v[0] == "#") || is_array($v))
 					{
 						array_push($stack, $this->makeRightColumn($k, $v));
 					}
