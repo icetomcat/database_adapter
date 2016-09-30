@@ -2,7 +2,7 @@
 
 namespace Database;
 
-use Database\Interfaces\ISchema;
+use Database\Base\AbstractQuery;
 use Exception;
 use PDO;
 use PDOException;
@@ -197,7 +197,7 @@ class Adapter
 
 	/**
 	 * @param array $query
-	 * @return Base\AbstractQuery
+	 * @return AbstractQuery
 	 */
 	public function select($query)
 	{
@@ -208,7 +208,7 @@ class Adapter
 	/**
 	 * 
 	 * @param array $query
-	 * @return Base\AbstractQuery
+	 * @return AbstractQuery
 	 */
 	public function insert($query)
 	{
@@ -219,7 +219,7 @@ class Adapter
 	/**
 	 * 
 	 * @param array $query
-	 * @return Base\AbstractQuery
+	 * @return AbstractQuery
 	 */
 	public function update($query)
 	{
@@ -230,7 +230,7 @@ class Adapter
 	/**
 	 * 
 	 * @param array $query
-	 * @return Base\AbstractQuery
+	 * @return AbstractQuery
 	 */
 	public function delete($query)
 	{
@@ -277,7 +277,7 @@ class Adapter
 		$query["columns"] = ["COUNT" => ["*"]];
 		if (isset($query["order"]))
 			unset($query["order"]);
-		
+
 		return 0 + $this->select($query)->fetchColumn();
 	}
 
@@ -590,9 +590,16 @@ class Adapter
 		$this->log[] = $query;
 	}
 
-	public function getLog()
+	public function getLog($n = 0)
 	{
-		return $this->log;
+		if ($n > 0)
+		{
+			return array_slice($this->log, -$n, $n);
+		}
+		else
+		{
+			return $this->log;
+		}
 	}
 
 	public function getLastQuery()
