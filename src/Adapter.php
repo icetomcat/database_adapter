@@ -312,14 +312,7 @@ class Adapter
 		}
 		if ($type->getDefault() !== null)
 		{
-			if (is_string($type->getDefault()) && (strlen($type->getDefault()) > 0) && $type->getDefault()[0] == "#")
-			{
-				$result .= " DEFAULT " . substr($type->getDefault(), -strlen($type->getDefault()) + 1);
-			}
-			else
-			{
-				$result .= " DEFAULT '{$type->getDefault()}'";
-			}
+			$result .= " DEFAULT '{$type->getDefault()}'";
 		}
 		if ($type->isAutoIncrement() && !$without_auto_increment)
 		{
