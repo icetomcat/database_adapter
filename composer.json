@@ -3,7 +3,9 @@
     "description": "Database adapter with table schema and simple query builder.",
 	"type": "library",
 	"require": {
-		"php": ">=5.4.0",
+		"php": ">=5.4.0"
+	},
+	"require-dev": {
 		"phpunit/phpunit": "^4.6"
 	},
 	"autoload": {
