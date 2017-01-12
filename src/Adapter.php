@@ -540,7 +540,7 @@ class Adapter
 	{
 		$sql = "SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT, COLLATION_NAME, COLUMN_KEY, COLUMN_TYPE 
 					FROM INFORMATION_SCHEMA.COLUMNS 
-					WHERE `table_name` = '{$table}'";
+					WHERE `TABLE_NAME` = '{$table}' AND `TABLE_SCHEMA` = '{$this->config["dbname"]}'";
 		return $this->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 	}
 
