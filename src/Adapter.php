@@ -530,10 +530,19 @@ class Adapter
 
 		if (!empty($changes))
 		{
-			$sql = "ALTER " . ($ignore ? "IGNORE " : "") . "TABLE " . $this->prefix . $table->getName() . " " . implode(", ", $changes);
+			$sql = "ALTER " . (version_compare($this->version(), "5.7.0" , "<") && $ignore ? "IGNORE " : "") . "TABLE " . $this->prefix . $table->getName() . " " . implode(", ", $changes);
 			$this->exec($sql);
 			return $sql;
 		}
+	}
+
+	public function version()
+	{
+		$version = $this->pdo->query('select version()')->fetchColumn();
+
+		$version = mb_substr($version, 0, 6);
+
+		return $version;
 	}
 
 	public function getMetaData($table)
