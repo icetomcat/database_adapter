@@ -390,7 +390,7 @@ class Adapter
 		return $sql;
 	}
 
-	public function alterTable(Schema $table, $ignore = false)
+	public function alterTable(Schema $table)
 	{
 		if (!$this->tableExists($this->prefix . $table->getName()))
 		{
@@ -530,7 +530,7 @@ class Adapter
 
 		if (!empty($changes))
 		{
-			$sql = "ALTER " . (version_compare($this->version(), "5.7.0" , "<") && $ignore ? "IGNORE " : "") . "TABLE " . $this->prefix . $table->getName() . " " . implode(", ", $changes);
+			$sql = "ALTER TABLE " . $this->prefix . $table->getName() . " " . implode(", ", $changes);
 			$this->exec($sql);
 			return $sql;
 		}
